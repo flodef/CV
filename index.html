@@ -1,424 +1,584 @@
 <!DOCTYPE html>
 <html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Flojito Stillnet - CV</title>
+        <link type="image/png" sizes="100x100" rel="icon" href="./favicon.png" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://unpkg.com/tippy.js@6"></script>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flojito Stillnet - CV</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: "Helvetica Neue", sans-serif;
-      /* Use a macOS-like font */
-      background-color: #f0f0f0;
-      color: #333333;
-    }
+        <style>
+            body {
+                font-family: "Helvetica Neue", sans-serif;
+                /* Use a macOS-like font */
+                background-color: #f0f0f0;
+                color: #333333;
+            }
 
-    .container {
-      padding: 20px;
-    }
+            .container {
+                padding: 20px;
+            }
 
-    .section {
-      margin-bottom: 30px;
-    }
+            h2 {
+                font-size: 1.8em;
+                color: #007bff;
+                /* macOS-like blue color */
+            }
 
-    h2 {
-      font-size: 1.8em;
-      color: #007bff;
-      /* macOS-like blue color */
-    }
+            p {
+                font-size: 1.1em;
+                line-height: 1.5;
+                margin: 0px;
+            }
 
-    p {
-      font-size: 1.1em;
-      line-height: 1.5;
-    }
+            a {
+                color: #007bff;
+                text-decoration: none;
+                font-weight: bold;
+            }
 
-    a {
-      color: #007bff;
-      text-decoration: none;
-      font-weight: bold;
-    }
+            .split-container {
+                display: flex;
+                justify-content: center;
+                margin: 0 auto;
+                height: 100vh;
+            }
 
-    .split-container {
-      display: flex;
-      justify-content: center;
-      margin: 0 auto;
-      height: 100vh;
-    }
+            /* Adjust chart dimensions for better fit */
+            .chart {
+                display: flex;
+                max-width: 100%;
+                width: auto;
+                height: auto;
+                margin: 0 auto;
+            }
 
-    /* Adjust chart dimensions for better fit */
-    .chart {
-      display: flex;
-      max-width: 100%;
-      width: auto;
-      height: auto;
-      margin: 0 auto;
-    }
+            .personal-details {
+                display: flex;
+                flex-direction: column;
+                left: 0px;
+                width: 30%;
+                position: absolute;
+                flex: 1;
+                padding: 20px;
+                background-color: #f0f0f0;
+                border-radius: 8px 0 0 8px;
+            }
 
-    .personal-details {
-      flex: 1;
-      padding: 20px;
-      background-color: #f0f0f0;
-      border-radius: 8px 0 0 8px;
-    }
+            .cv-content {
+                display: flex;
+                flex-direction: column;
+                left: 33%;
+                right: 20px;
+                position: absolute;
+                flex: 2;
+                padding: 20px;
+                background-color: #ffffff;
+                border-radius: 0 8px 8px 0;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                height: 90vh;
+                max-height: 888px;
+            }
 
-    .cv-content {
-      flex: 2;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 0 8px 8px 0;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      height: 90vh;
-    }
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            }
 
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
+            .modal-content {
+                background-color: #f5f5f5;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                max-width: 70%;
+                min-width: 300px;
+                position: relative;
+            }
 
-    .modal-content {
-      background-color: #f5f5f5;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-width: 70%;
-      min-width: 300px;
-      position: relative;
-    }
+            .modal-label {
+                font-size: 1.8em;
+                color: #007bff;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
 
-    .modal-label {
-      font-size: 1.8em;
-      color: #007bff;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+            .modal-value {
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
 
-    .modal-value {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+            .modal-footer {
+                font-weight: bold;
+                margin-top: 10px;
+            }
 
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      cursor: pointer;
-      font-size: 24px;
-      font-weight: bold;
-      width: 24px;
-      /* Set the width to 24px */
-      height: 24px;
-      /* Set the height to 24px */
-      line-height: 1;
-      text-align: center;
-    }
+            .modal-close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                cursor: pointer;
+                font-size: 24px;
+                font-weight: bold;
+                width: 24px;
+                height: 24px;
+                line-height: 1;
+                text-align: center;
+            }
 
-    /* Disable scrolling on desktop */
-    @media (min-width: 769px) and (min-height: 721px) {
-      body {
-        overflow: hidden;
-      }
-    }
+            .tippy-content {
+                font-size: 14px;
+                font-weight: bold;
+            }
 
-    @media (max-width: 768px) or (max-height: 720px) {
-      body {
-        font-size: 16px;
-      }
+            /* Disable scrolling on desktop */
+            @media (min-width: 769px) and (min-height: 761px) {
+                body {
+                    overflow: hidden;
+                }
+            }
 
-      .container {
-        padding: 10px;
-      }
+            @media (max-width: 1158px) or (max-height: 826px) {
+                h2 {
+                    font-size: 1.4em;
+                }
 
-      .section {
-        margin-bottom: 20px;
-      }
+                p {
+                    font-size: 1em;
+                    margin: 0px;
+                }
+            }
 
-      h2 {
-        font-size: 1.5em;
-      }
+            @media (max-width: 768px) or (max-height: 760px) {
+                body {
+                    font-size: 16px;
+                }
 
-      p {
-        font-size: 1em;
-      }
+                .container {
+                    padding: 10px;
+                }
 
-      .modal-content {
-        max-width: 80%;
-        min-width: 240px;
-      }
+                .section {
+                    margin-bottom: 20px;
+                }
 
-      /* Single Column Layout for Mobile */
-      .split-container {
-        flex-direction: column;
-        height: auto;
-      }
+                h2 {
+                    font-size: 1.5em;
+                }
 
-      .chart {
-        display: flex;
-        justify-content: center;
-      }
-    }
+                p {
+                    font-size: 1em;
+                }
 
-  </style>
-</head>
+                .personal-details {
+                    display: block;
+                    position: static;
+                    width: 90%;
+                }
 
-<body>
-  <div class="container">
-    <div class="split-container">
-      <div class="personal-details">
-        <h2>Flojito Stillnet</h2>
-        <p><b>Spécialité</b> : Applications Web, Gestion financière, Blockchain<br>
-          <b>Localisation</b> : Saint-Nic, Finistère, Bretagne<br>
-          <b>Email</b> : <a href="mailto:flo@fims.fi" target="_blank">flo@fims.fi</a><br>
-          <b>Contributions</b> : <a href="https://github.com/flodef" target="_blank">GitHub</a><br>
-          <b>Profile</b> : <a href="https://www.linkedin.com/in/flodef/" target="_blank">LinkedIn</a>
-        </p>
+                .cv-content {
+                    display: block;
+                    position: static;
+                }
 
-        <h2>Formation</h2>
-        <p>
-          <b>Conseiller en Investissement Financier [mai 2020]</b><br>
-          Sumatra Formation Conseil<br>
-          <b>Ingénieur informatique [janvier 2005]</b><br>
-          Université de Technologie de Compiègne (UTC)<br>
-          <b>Technicien Supérieur (BTS) [juillet 2002]</b><br>
-          Lycée Victor Hugo<br>
-        </p>
+                .modal-content {
+                    max-width: 80%;
+                    min-width: 240px;
+                }
 
-        <h2>Langues</h2>
-        <p>
-          Français (Natif)<br>
-          Anglais (Bilingue)<br>
-          Japonais (Courant)<br>
-          Esperanto (Courant)<br>
-          Espagnol (Elémentaire)<br>
-        </p>
+                /* Single Column Layout for Mobile */
+                .split-container {
+                    flex-direction: column;
+                    height: auto;
+                }
 
-      </div>
-      <div class="cv-content">
-        <div class="section education">
-          <h2>COMPÉTENCES</h2>
-          <div class="chart">
-            <canvas id="educationChart"></canvas>
-          </div>
-          <!-- Add education details here -->
-        </div>
+                .chart {
+                    display: flex;
+                    justify-content: center;
+                }
+            }
 
-        <div class="section experience">
-          <h2>EXPÉRIENCES</h2>
-          <div class="chart">
-            <canvas id="experienceChart"></canvas>
-          </div>
-          <!-- Add experience details here -->
-        </div>
+            @keyframes rubberBand {
+                from {
+                    transform: scale3d(1, 1, 1);
+                }
+                30% {
+                    transform: scale3d(1.25, 0.75, 1);
+                }
+                40% {
+                    transform: scale3d(0.75, 1.25, 1);
+                }
+                50% {
+                    transform: scale3d(1.15, 0.85, 1);
+                }
+                65% {
+                    transform: scale3d(0.95, 1.05, 1);
+                }
+                75% {
+                    transform: scale3d(1.05, 0.95, 1);
+                }
+                to {
+                    transform: scale3d(1, 1, 1);
+                }
+            }
 
-        <div class="modal" id="popupModal">
-          <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <div id="popupContent">
-              <!-- Popup content will be dynamically added here -->
+            .rubber-band {
+                animation: rubberBand 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="split-container">
+                <div class="personal-details">
+                    <h2>Flojito Stillnet</h2>
+                    <p>
+                        <b>Spécialité</b> : Applications Web, Gestion financière, Blockchain<br />
+                        <b>Localisation</b> : Saint-Nic, Finistère, Bretagne<br />
+                        <b>Email</b> : <a href="mailto:flo@fims.fi" target="_blank">flo@fims.fi</a><br />
+                        <b>Contributions</b> : <a href="https://github.com/flodef" target="_blank">GitHub</a><br />
+                        <b>Profile</b> : <a href="https://www.linkedin.com/in/flodef/" target="_blank">LinkedIn</a>
+                    </p>
+
+                    <h2>Formation</h2>
+                    <p>
+                        <b>Conseiller en Investissement Financier [mai 2020]</b><br />
+                        Sumatra Formation Conseil<br />
+                        <b>Ingénieur informatique [janvier 2005]</b><br />
+                        Université de Technologie de Compiègne (UTC)<br />
+                        <b>Technicien Supérieur (BTS) [juillet 2002]</b><br />
+                        Lycée Victor Hugo<br />
+                    </p>
+
+                    <h2>Langues</h2>
+                    <p>
+                        Français (Natif)<br />
+                        Anglais (Bilingue)<br />
+                        Japonais (Courant)<br />
+                        Esperanto (Courant)<br />
+                        Espagnol (Elémentaire)<br />
+                    </p>
+                </div>
+                <div class="cv-content">
+                    <div class="section education">
+                        <h2>COMPÉTENCES</h2>
+                        <div class="chart">
+                            <canvas id="educationChart"></canvas>
+                        </div>
+                        <!-- Add education details here -->
+                    </div>
+
+                    <div class="section experience">
+                        <h2>EXPÉRIENCES</h2>
+                        <div class="chart">
+                            <canvas id="experienceChart"></canvas>
+                        </div>
+                        <!-- Add experience details here -->
+                    </div>
+
+                    <div class="modal" id="popupModal">
+                        <div class="modal-content">
+                            <span class="modal-close" onclick="closeModal()">&times;</span>
+                            <div id="popupContent">
+                                <!-- Popup content will be dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <script>
-    function isMobileBrowser() {
-      return /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
+        <script>
+            <!-- Insert your data here -->
+            // Education Chart Data
+            const educationData = {
+                labels: ["Typescript / Javascript", "Next.js / React", "Web3", "HTML5", "Tailwind / CSS"],
+                datasets: [
+                    {
+                        label: "Utilisation",
+                        data: [20, 30, 20, 20, 10],
+                        backgroundColor: [
+                            "rgba(255, 99, 132)",
+                            "rgba(54, 162, 235)",
+                            "rgba(255, 206, 86)",
+                            "rgba(75, 192, 192)",
+                            "rgba(153, 102, 255)",
+                        ],
+                    },
+                ],
+            };
+            const educationComment = [
+                `J'utilise Typescript et Javascript dans tous mes projets afin de construire des applications web et gérer toute la partie interactive des pages.`,
+                `Next.js et React me simplifient la génération du code serveur et le rendu client de mes applications web.\n
+                      J'utilise également React Native pour créer des applications mobiles.`,
+                `Le Web3 autorise mes applications web à gérer des paiements numériques ainsi qu'une authentification sans login / mot de passe.\n
+                      Il permet également de gérer des données décentralisées.`,
+                `HTML5 est ce qui me permet d'afficher de manière graphique mes applications web.`,
+                `CSS me facilite la mise en page et toute la partie graphique et dynamique des pages.\n
+                      Tailwind accélère le développement en me fournissant des composants graphiques prêts à l'emploi.`,
+            ];
+            const educationFooter = {
+                label: "Projets",
+                data: [6, 2, 2, 4, 6],
+            };
 
-    // Function to open the custom popup
-    function openPopup(label, value, comment) {
-      const modal = document.getElementById("popupModal");
-      modal.style.display = "flex";
+            // Experience Chart Data
+            const experienceData = {
+                labels: [
+                    "FiMs",
+                    "Alter'Éco 30",
+                    "Itesoft",
+                    "Renault F1",
+                    "Groupe PSA",
+                    "Nestlé",
+                    "F4 Group",
+                    "Parexel",
+                ],
+                datasets: [
+                    {
+                        label: "Durée",
+                        data: [80 / 12, 28 / 12, 38 / 12, 10 / 12, 13 / 12, 37 / 12, 13 / 12, 8 / 12],
+                        backgroundColor: [
+                            "rgba(255, 99, 132)",
+                            "rgba(54, 162, 235)",
+                            "rgba(255, 206, 86)",
+                            "rgba(75, 192, 192)",
+                            "rgba(153, 102, 255)",
+                            "rgba(255, 159, 64)",
+                            "rgba(255, 99, 132)",
+                            "rgba(54, 162, 235)",
+                        ],
+                    },
+                ],
+            };
+            const experienceComment = [
+                `Système de gestion financière permettant de faire des investissements en Finance Traditionnelle (TradFi) et en Finance Décentralisée (DeFi).\n
+            Création d'une interface web moderne multi-plateforme pour gérer ses placements.\n
+            Réalisation d'un système de paiement (POS) basé sur Solana Pay.\n
+            Gestion de la communication pour une communauté d'investisseurs (Discord, Twitter, Medium).`,
+                `Mise en place d'un système de caisse automatique pour la gestion d'une bio coopérative en auto gestion.\n
+            Élaboration d'un cahier des charges, ainsi qu'un prototype de monnaie locale sous forme électronique.\n
+            Création des sites web et intranet.`,
+                `Logiciel d’aide à la dématérialisation de documents papiers depuis une interface web.\n`,
+                `Logiciel de simulation d’essai de Formule 1 visant à réduire le recours à des essais\n
+                      Application de calcul des données de piste en temps réel.`,
+                `Logiciel de gestion des factures fournisseurs et clients ainsi que des avoirs et des litiges pour le service comptable du constructeur automobile.\n
+                      Automatisation des processus répétitifs de chargement et transformation des données brutes en données exploitables.`,
+                `Logiciel de chargement de données dans SAP, interfacé avec une base de données.\n
+                      Gestion des données de production et des stocks de produits finis.`,
+                `Composants d'interface « homme machine » (menus, sons, animations) à intégrer dans des jeux vidéo.\n
+                      Création d'un outil de gestion de projets pour les développeurs de jeux vidéo.`,
+                `Intranet de gestion de données de l’industrie pharmaceutique : médicaments, validité, stocks.\n
+                      Élaboration d’une application de gestion de données multipostes automatisant les calculs et gérant un suivi pointu d’accès aux données.`,
+            ];
+            const experienceFooter = {
+                label: "Langages",
+                data: [
+                    `Typescript, Next.js, React, Web3, HTML5, Tailwind, CSS, Firebase, Solana`,
+                    `PHP, Javascript, HTML, CSS, MySQL, WordPress`,
+                    `C#, WPF, SQL`,
+                    `C#, WPF, Batch DOS`,
+                    `C#, WPF, XAML, Silverlight, SQL`,
+                    `C#, SQL, C++, VBA, Batch DOS`,
+                    `C++, DirectX`,
+                    `HTML, XML, ASP, Javascript, SQL`,
+                ],
+            };
 
-      // Generate the popup content with proper styling
-      const popupContent = `
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <div class="modal-label">${label}</div>
-            <div class="modal-value">${value}</div>
-            <div class="modal-comment">${comment.replaceAll('\n', '<br>')}</div>
-          `;
-      const popupContentDiv = document.getElementById("popupContent");
-      popupContentDiv.innerHTML = popupContent;
+            /*** End of data ***/
 
-      modal.addEventListener("click", closeModalOutside);
-    }
+            // Function to check if the browser is mobile
+            function isMobileBrowser() {
+                return /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            }
 
-    // Function to close the custom popup
-    function closeModal() {
-      const modal = document.getElementById("popupModal");
-      modal.style.display = "none";
+            // Initialize tooltips with "click" trigger for both desktop and mobile
+            const tooltips = tippy(".chart", {
+                content: "Cliquez sur le graphique pour plus de détails !",
+                showOnCreate: true, // Display tooltip at startup
+                delay: [1000, 500], // Add a small delay
+                duration: [500, 200], // Add a small transition
+                hideOnClick: true, // Hide tooltip only on second click
+                placement: "top", // Position the tooltip on top
+                onMount(instance) {
+                    requestAnimationFrame(() => {
+                        instance.popper.firstElementChild.classList.add("rubber-band");
+                    });
+                },
+                onHidden(instance) {
+                    instance.popper.firstElementChild.classList.remove("rubber-band");
+                },
+                popperOptions: {
+                    strategy: "fixed",
+                    modifiers: [
+                        {
+                            name: "flip",
+                            options: {
+                                fallbackPlacements: ["top"],
+                            },
+                        },
+                    ],
+                },
+            });
 
-      modal.removeEventListener("click", closeModalOutside);
-    }
+            // Function to hide tooltip after the first click
+            function hideTooltipAfterFirstClick() {
+                tooltips.forEach((tooltip) => {
+                    tooltip.hide(); // Hide the tooltip
+                    tooltip.setProps({ trigger: "manual" }); // Change trigger to "manual"
+                });
+            }
 
-    // Function to close the popup when clicked outside
-    function closeModalOutside(event) {
-      if (event.target === event.currentTarget) {
-        closeModal();
-      }
-    }
+            // Function to open the custom popup
+            function openPopup(label, value, comment, footer) {
+                // Hide tooltip after the first click
+                hideTooltipAfterFirstClick();
 
-    // Education Chart Data
-    const educationData = {
-      labels: ['Typescript / Javascript', 'Next.js / React', 'Web3', 'HTML5', 'CSS'],
-      datasets: [{
-        label: 'Utilisation',
-        data: [20, 30, 20, 20, 10],
-        backgroundColor: [
-          'rgba(255, 99, 132)',
-          'rgba(54, 162, 235)',
-          'rgba(255, 206, 86)',
-          'rgba(75, 192, 192)',
-          'rgba(153, 102, 255)',
-        ]
-      }]
-    };
-    const educationComment = [
-      `J'utilise Typescript et Javascript dans tous mes projets afin de construire des applications web et gérer toute la partie interactive des pages.`,
-      `Next.js et React me simplifient la génération du code serveur et le rendu client de mes applications web.`,
-      `Le Web3 autorise mes applications web à gérer des paiements numériques ainsi qu'une authentification sans login / mot de passe.`,
-      `HTML5 est ce qui me permet d'afficher de manière graphique mes applications web.`,
-      `CSS me facilite la mise en page et toute la partie graphique et dynamique des pages.`];
+                // Get the modal
+                const modal = document.getElementById("popupModal");
+                modal.style.display = "flex";
 
-    // Experience Chart Data
-    const experienceData = {
-      labels: ['FiMs', 'Alter\'Éco 30', 'Itesoft', 'Renault F1', 'Groupe PSA', 'Nestlé', 'F4 Group', 'Parexel'],
-      datasets: [{
-        label: 'Durée',
-        data: [80 / 12, 28 / 12, 38 / 12, 10 / 12, 13 / 12, 37 / 12, 13 / 12, 8 / 12],
-        backgroundColor: [
-          'rgba(255, 99, 132)',
-          'rgba(54, 162, 235)',
-          'rgba(255, 206, 86)',
-          'rgba(75, 192, 192)',
-          'rgba(153, 102, 255)',
-          'rgba(255, 159, 64)',
-          'rgba(255, 99, 132)',
-          'rgba(54, 162, 235)'
-        ]
-      }]
-    };
-    const experienceComment = [
-      `Système de gestion financière permettant de faire des investissements en Finance Traditionnelle (TradFi) et en Finance Décentralisée (DeFi).\n
-      Création d'une interface web moderne multi-plateforme pour gérer ses placements.\n
-      Réalisation d'un système de paiement (POS) basé sur Solana Pay.\n
-      Gestion de la communication pour une communauté d'investisseurs (Discord, Twitter, Medium).`,
-      `Mise en place d'un système de caisse automatique pour la gestion d'une bio coopérative en auto gestion.\n
-      Élaboration d'un cahier des charges, ainsi qu'un prototype de monnaie locale sous forme électronique.\n
-      Création de sites web et intranet avec Wordpress.`,
-      `Logiciel d’aide à la dématérialisation de documents papiers.`,
-      `Logiciel de simulation d’essai de Formule 1, calcul des données de piste en temps réel.`,
-      `Logiciel de facture pour le service comptable du constructeur automobile.`,
-      `Logiciel de chargement de données dans SAP, interfacé avec une base de données.`,
-      `Composants d'interface « homme machine » (menus, sons, animations) à intégrer dans des jeux vidéo.`,
-      `Intranet de gestion de données de l’industrie pharmaceutique : médicaments, validité, stocks.`];
+                // Generate the popup content with proper styling
+                const popupContent = `
+                  <span class="modal-close" onclick="closeModal()">&times;</span>
+                  <div class="modal-label">${label}</div>
+                  <div class="modal-value">${value}</div>
+                  <div class="modal-comment">${comment.replaceAll("\n", "<br>")}</div>
+                  <div class="modal-footer">${footer}</div>
+                `;
+                const popupContentDiv = document.getElementById("popupContent");
+                popupContentDiv.innerHTML = popupContent;
 
-    // Create Education Chart
-    const educationChart = new Chart(document.getElementById('educationChart').getContext('2d'), {
-      type: 'doughnut',
-      data: educationData,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        onClick: function (event, elements) {
-          if (elements.length > 0) {
-            const index = elements[0].index;
-            const label = educationData.labels[index];
-            const value = educationData.datasets[0].label + ' : ' + educationData.datasets[0].data[index] + '%';
-            const comment = educationComment[index];
-            openPopup(label, value, comment);
-          }
-        },
-      }
-    });
+                modal.addEventListener("click", closeModalOutside);
+            }
 
-    // Create Experience Chart
-    const experienceChart = new Chart(document.getElementById('experienceChart').getContext('2d'), {
-      type: 'doughnut',
-      data: experienceData,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        onClick: function (event, elements) {
-          if (elements.length > 0) {
-            const index = elements[0].index;
-            const label = experienceData.labels[index];
-            const number = experienceData.datasets[0].data[index];
-            const year = Math.floor(number);
-            const month = Math.round((number - year) * 12);
-            const value = experienceData.datasets[0].label + ' : ' + (year ? year + ' an' + (year >= 2 ? 's ' : ' ') : '') + (month ? month + ' mois' : '');
-            const comment = experienceComment[index];
-            openPopup(label, value, comment);
-          }
-        }
-      }
-    });
+            // Function to close the custom popup
+            function closeModal() {
+                const modal = document.getElementById("popupModal");
+                modal.style.display = "none";
 
-    // Function to set the chart size corresponding to the screen size
-    function setChartSize() {
-      const screenHeight = window.innerHeight; // Get the height of the screen
-      const screenWidth = window.innerWidth; // Get the width of the screen
+                modal.removeEventListener("click", closeModalOutside);
+            }
 
-      if (screenWidth >= 768 && screenHeight >= 720) {
-        const charts = document.querySelectorAll('.chart canvas'); // Select all chart canvases
-        const chartWidth = Math.min(screenWidth - 350, 900); // Set a width of 900px or width minus personal details content
-        const chartHeight = Math.min(screenHeight * 0.35, 400); // Set a height of 400px or 35% of screen height
+            // Function to close the popup when clicked outside
+            function closeModalOutside(event) {
+                if (event.target === event.currentTarget) {
+                    closeModal();
+                }
+            }
 
-        charts.forEach(function (chart) {
-          chart.style.width = chartWidth + 'px';
-          chart.style.height = chartHeight + 'px';
-          chart.style.margin = 'auto';
-        });
-      }
-    }
+            // Create Education Chart
+            const educationChart = new Chart(document.getElementById("educationChart").getContext("2d"), {
+                type: "doughnut",
+                data: educationData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const label = educationData.labels[index];
+                            const value =
+                                educationData.datasets[0].label + " : " + educationData.datasets[0].data[index] + "%";
+                            const comment = educationComment[index];
+                            const footer = educationFooter.label + " : " + educationFooter.data[index];
+                            openPopup(label, value, comment, footer);
+                        }
+                    },
+                },
+            });
 
-    // Call the function initially and on window resize
-    setChartSize();
-    window.addEventListener('resize', setChartSize);
+            // Create Experience Chart
+            const experienceChart = new Chart(document.getElementById("experienceChart").getContext("2d"), {
+                type: "doughnut",
+                data: experienceData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const label = experienceData.labels[index];
+                            const number = experienceData.datasets[0].data[index];
+                            const year = Math.floor(number);
+                            const month = Math.round((number - year) * 12);
+                            const value =
+                                experienceData.datasets[0].label +
+                                " : " +
+                                (year ? year + " an" + (year >= 2 ? "s " : " ") : "") +
+                                (month ? month + " mois" : "");
+                            const comment = experienceComment[index];
+                            const footer = experienceFooter.label + " : " + experienceFooter.data[index];
+                            openPopup(label, value, comment, footer);
+                        }
+                    },
+                },
+            });
 
-    // Function to configure tooltips based on screen width
-    function configureTooltips(chartOptions) {
-      const tooltipsEnabled = !isMobileBrowser();
+            // Function to set the chart size corresponding to the screen size
+            function setChartSize() {
+                const screenHeight = window.innerHeight; // Get the height of the screen
+                const screenWidth = window.innerWidth; // Get the width of the screen
 
-      return {
-        ...chartOptions, // Spread existing options
-        plugins: {
-          ...chartOptions.plugins, // Spread existing plugins
-          tooltip: {
-            ...chartOptions.plugins?.tooltip, // Spread existing tooltip options (if available)
-            enabled: tooltipsEnabled
-          }
-        }
-      };
-    }
+                if (screenWidth >= 768 && screenHeight >= 720) {
+                    const charts = document.querySelectorAll(".chart canvas"); // Select all chart canvases
+                    const chartWidth = Math.min(screenWidth - 350, 900); // Set a width of 900px or width minus personal details content
+                    const chartHeight = Math.min(screenHeight * 0.35, 400); // Set a height of 400px or 35% of screen height
 
-    // Configure chart tooltips based on screen width
-    function configureChartTooltips(chart) {
-      const updatedOptions = configureTooltips(chart.options);
-      chart.options = updatedOptions;
-      chart.update(); // Update the chart with new options
-    }
+                    charts.forEach(function (chart) {
+                        chart.style.width = chartWidth + "px";
+                        chart.style.height = chartHeight + "px";
+                        chart.style.margin = "auto";
+                    });
+                }
+            }
 
-    // Call the function for each chart initially and on window resize
-    configureChartTooltips(educationChart);
-    configureChartTooltips(experienceChart);
+            // Call the function initially and on window resize
+            setChartSize();
+            window.addEventListener("resize", setChartSize);
 
-    window.addEventListener('resize', function () {
-      configureChartTooltips(educationChart);
-      configureChartTooltips(experienceChart);
-    });
-  </script>
-</body>
+            // Function to configure tooltips based on screen width
+            function configureTooltips(chartOptions) {
+                const tooltipsEnabled = !isMobileBrowser();
 
+                return {
+                    ...chartOptions, // Spread existing options
+                    plugins: {
+                        ...chartOptions.plugins, // Spread existing plugins
+                        tooltip: {
+                            ...chartOptions.plugins?.tooltip, // Spread existing tooltip options (if available)
+                            enabled: tooltipsEnabled,
+                        },
+                    },
+                };
+            }
+
+            // Configure chart tooltips based on screen width
+            function configureChartTooltips(chart) {
+                const updatedOptions = configureTooltips(chart.options);
+                chart.options = updatedOptions;
+                chart.update(); // Update the chart with new options
+            }
+
+            // Call the function for each chart initially and on window resize
+            configureChartTooltips(educationChart);
+            configureChartTooltips(experienceChart);
+
+            window.addEventListener("resize", function () {
+                configureChartTooltips(educationChart);
+                configureChartTooltips(experienceChart);
+            });
+        </script>
+    </body>
 </html>
