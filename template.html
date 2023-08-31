@@ -247,23 +247,38 @@
                         [Your Address]<br />
                         [City, State, Postal Code]<br />
                         Email: [Email Address]<br />
-                        LinkedIn: <a href="[LinkedIn Profile]">LinkedIn Profile</a>
+                        <b>Contributions</b> : <a href="https://github.com/your_pseudo" target="_blank">GitHub</a><br />
+                        <b>Profile</b> : <a href="https://www.linkedin.com/in/your_pseudo/" target="_blank">LinkedIn</a>
                     </p>
+
+                    <h2>Languages</h2>
+                    <p>
+                        English<br />
+                        French<br />
+                        Spanish<br />
+                    </p>
+
+                    <h2>Hobbies</h2>
+                    <p>
+                        Hobbies 1<br />
+                        Hobbies 2<br />
+                        Hobbies 3<br />
+                    </p>
+
                     <!-- Add more personal details as needed -->
                 </div>
                 <div class="cv-content">
                     <div class="section education">
                         <h2>EDUCATION</h2>
-                        <div class="pie-chart">
-                            <canvas id="educationPieChart"></canvas>
+                        <div class="chart">
+                            <canvas id="educationChart"></canvas>
                         </div>
-                        <!-- Add education details here -->
                     </div>
 
                     <div class="section experience">
                         <h2>EXPERIENCE</h2>
-                        <div class="pie-chart">
-                            <canvas id="experiencePieChart"></canvas>
+                        <div class="chart">
+                            <canvas id="experienceChart"></canvas>
                         </div>
                         <!-- Add experience details here -->
                     </div>
@@ -281,7 +296,7 @@
         </div>
 
         <script>
-            <!-- Insert your data here -->
+            /*** Insert your data here ***/
 
             // Education Chart Data
             const educationData = {
@@ -307,6 +322,10 @@
                 `School Comment 4.`,
                 `School Comment 5.`,
             ];
+            const educationFooter = {
+                label: "Education Footer",
+                data: [6, 2, 2, 4, 6],
+            };
 
             // Experience Chart Data
             const experienceData = {
@@ -347,6 +366,19 @@
                 `Experience Comment 7.`,
                 `Experience Comment 8.`,
             ];
+            const experienceFooter = {
+                label: "Experience Footer",
+                data: [
+                    "I did this",
+                    "I did that",
+                    "I did this",
+                    "I did that",
+                    "I did this",
+                    "I did that",
+                    "I did this",
+                    "I did that",
+                ],
+            };
 
             /*** End of data ***/
 
@@ -357,7 +389,7 @@
 
             // Initialize tooltips with "click" trigger for both desktop and mobile
             const tooltips = tippy(".chart", {
-                content: "Cliquez pour plus de détails !",
+                content: "Click on the graph for more details !",
                 showOnCreate: true, // Display tooltip at startup
                 delay: [1000, 500], // Add a small delay
                 duration: [500, 200], // Add a small transition
