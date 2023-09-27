@@ -350,7 +350,16 @@
                 datasets: [
                     {
                         label: "Durée",
-                        data: [80 / 12, 28 / 12, 38 / 12, 10 / 12, 13 / 12, 37 / 12, 13 / 12, 8 / 12],
+                        data: [
+                            (new Date() - new Date("2016-06-01")) / 2628000000, // Autoupdate the time spent according to current date
+                            28,
+                            38,
+                            10,
+                            13,
+                            37,
+                            13,
+                            8,
+                        ],
                         backgroundColor: [
                             "rgba(255, 99, 132)",
                             "rgba(54, 162, 235)",
@@ -498,6 +507,15 @@
                             openPopup(label, value, comment, footer);
                         }
                     },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return ` ${tooltipItem.dataset.label} : ${tooltipItem.formattedValue}%`;
+                                },
+                            },
+                        },
+                    },
                 },
             });
 
@@ -513,20 +531,32 @@
                             const index = elements[0].index;
                             const label = experienceData.labels[index];
                             const number = experienceData.datasets[0].data[index];
-                            const year = Math.floor(number);
-                            const month = Math.round((number - year) * 12);
-                            const value =
-                                experienceData.datasets[0].label +
-                                " : " +
-                                (year ? year + " an" + (year >= 2 ? "s " : " ") : "") +
-                                (month ? month + " mois" : "");
+                            const value = experienceData.datasets[0].label + " : " + formatDate(number);
                             const comment = experienceComment[index];
                             const footer = experienceFooter.label + " : " + experienceFooter.data[index];
                             openPopup(label, value, comment, footer);
                         }
                     },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return ` ${tooltipItem.dataset.label} : ${formatDate(tooltipItem.raw)}`;
+                                },
+                            },
+                        },
+                    },
                 },
             });
+
+            function formatDate(months) {
+                const years = Math.floor(months / 12);
+                const remainingMonths = Math.round(months % 12);
+                return (
+                    (years ? years + " an" + (years >= 2 ? "s " : " ") : "") +
+                    (remainingMonths ? remainingMonths + " mois" : "")
+                );
+            }
 
             // Function to set the chart size corresponding to the screen size
             function setChartSize() {

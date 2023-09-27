@@ -480,6 +480,15 @@
                             openPopup(label, value, comment, footer);
                         }
                     },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return ` ${tooltipItem.dataset.label} : ${tooltipItem.formattedValue}%`;
+                                },
+                            },
+                        },
+                    },
                 },
             });
 
@@ -495,20 +504,32 @@
                             const index = elements[0].index;
                             const label = experienceData.labels[index];
                             const number = experienceData.datasets[0].data[index];
-                            const year = Math.floor(number);
-                            const month = Math.round((number - year) * 12);
-                            const value =
-                                experienceData.datasets[0].label +
-                                " : " +
-                                (year ? year + " an" + (year >= 2 ? "s " : " ") : "") +
-                                (month ? month + " mois" : "");
+                            const value = experienceData.datasets[0].label + " : " + formatDate(number);
                             const comment = experienceComment[index];
                             const footer = experienceFooter.label + " : " + experienceFooter.data[index];
                             openPopup(label, value, comment, footer);
                         }
                     },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return ` ${tooltipItem.dataset.label} : ${formatDate(tooltipItem.raw)}`;
+                                },
+                            },
+                        },
+                    },
                 },
             });
+
+            function formatDate(months) {
+                const years = Math.floor(months / 12);
+                const remainingMonths = Math.round(months % 12);
+                return (
+                    (years ? years + " an" + (years >= 2 ? "s " : " ") : "") +
+                    (remainingMonths ? remainingMonths + " mois" : "")
+                );
+            }
 
             // Function to set the chart size corresponding to the screen size
             function setChartSize() {
