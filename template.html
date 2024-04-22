@@ -1,589 +1,622 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Flojito Stillnet - CV</title>
-        <link type="image/png" sizes="100x100" rel="icon" href="./favicon.png" />
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="https://unpkg.com/@popperjs/core@2"></script>
-        <script src="https://unpkg.com/tippy.js@6"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flojito Stillnet - CV</title>
+    <link type="image/png" sizes="100x100" rel="icon" href="./favicon.png" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
 
-        <style>
-            body {
-                font-family: "Helvetica Neue", sans-serif;
-                /* Use a macOS-like font */
-                background-color: #f0f0f0;
-                color: #333333;
-            }
+    <style>
+      body {
+        font-family: "Helvetica Neue", sans-serif;
+        /* Use a macOS-like font */
+        background-color: #f0f0f0;
+        color: #333333;
+      }
 
-            .container {
-                padding: 20px;
-            }
+      .container {
+        padding: 20px;
+      }
 
-            h2 {
-                font-size: 1.8em;
-                color: #007bff;
-                /* macOS-like blue color */
-            }
+      h2 {
+        font-size: 1.8em;
+        color: #007bff;
+        /* macOS-like blue color */
+      }
 
-            p {
-                font-size: 1.1em;
-                line-height: 1.5;
-                margin: 0px;
-            }
+      p {
+        font-size: 1.1em;
+        line-height: 1.5;
+        margin: 0px;
+      }
 
-            a {
-                color: #007bff;
-                text-decoration: none;
-                font-weight: bold;
-            }
+      a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+      }
 
-            .split-container {
-                display: flex;
-                justify-content: center;
-                margin: 0 auto;
-                height: 100vh;
-            }
+      .split-container {
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+        height: 100vh;
+      }
 
-            /* Adjust chart dimensions for better fit */
-            .chart {
-                display: flex;
-                max-width: 100%;
-                width: auto;
-                height: auto;
-                margin: 0 auto;
-            }
+      /* Adjust chart dimensions for better fit */
+      .chart {
+        display: flex;
+        max-width: 100%;
+        width: auto;
+        height: auto;
+        margin: 0 auto;
+      }
 
-            .personal-details {
-                display: flex;
-                flex-direction: column;
-                left: 0px;
-                width: 30%;
-                position: absolute;
-                flex: 1;
-                padding: 20px;
-                background-color: #f0f0f0;
-                border-radius: 8px 0 0 8px;
-            }
+      .personal-details {
+        display: flex;
+        flex-direction: column;
+        left: 0px;
+        width: 30%;
+        position: absolute;
+        flex: 1;
+        padding: 20px;
+        background-color: #f0f0f0;
+        border-radius: 8px 0 0 8px;
+      }
 
-            .cv-content {
-                display: flex;
-                flex-direction: column;
-                left: 33%;
-                right: 20px;
-                position: absolute;
-                flex: 2;
-                padding: 20px;
-                background-color: #ffffff;
-                border-radius: 0 8px 8px 0;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                height: 90vh;
-                max-height: 920px;
-            }
+      .cv-content {
+        display: flex;
+        flex-direction: column;
+        left: 33%;
+        right: 20px;
+        position: absolute;
+        flex: 2;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 0 8px 8px 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: 90vh;
+        max-height: 920px;
+      }
 
-            .modal {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                align-items: center;
-                justify-content: center;
-                z-index: 1000;
-            }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
 
-            .modal-content {
-                background-color: #f5f5f5;
-                border-radius: 8px;
-                padding: 20px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                text-align: center;
-                max-width: 70%;
-                min-width: 300px;
-                position: relative;
-            }
+      .modal-content {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 70%;
+        min-width: 300px;
+        position: relative;
+      }
 
-            .modal-label {
-                font-size: 1.8em;
-                color: #007bff;
-                font-weight: bold;
-                margin-bottom: 10px;
-            }
+      .modal-label {
+        font-size: 1.8em;
+        color: #007bff;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
 
-            .modal-value {
-                font-weight: bold;
-                margin-bottom: 10px;
-            }
+      .modal-value {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
 
-            .modal-footer {
-                font-weight: bold;
-                margin-top: 10px;
-            }
+      .modal-footer {
+        font-weight: bold;
+        margin-top: 10px;
+      }
 
-            .modal-close {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                cursor: pointer;
-                font-size: 24px;
-                font-weight: bold;
-                width: 24px;
-                height: 24px;
-                line-height: 1;
-                text-align: center;
-            }
+      .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bold;
+        width: 24px;
+        height: 24px;
+        line-height: 1;
+        text-align: center;
+      }
 
-            .tippy-content {
-                font-size: 14px;
-                font-weight: bold;
-            }
+      .tippy-content {
+        font-size: 14px;
+        font-weight: bold;
+      }
 
-            /* Disable scrolling on desktop */
-            @media (min-width: 769px) and (min-height: 761px) {
-                body {
-                    overflow: hidden;
-                }
-            }
+      /* Disable scrolling on desktop */
+      @media (min-width: 769px) and (min-height: 761px) {
+        body {
+          overflow: hidden;
+        }
+      }
 
-            @media (max-width: 1158px) or (max-height: 826px) {
-                h2 {
-                    font-size: 1.4em;
-                }
+      @media (max-width: 1158px) or (max-height: 826px) {
+        h2 {
+          font-size: 1.4em;
+        }
 
-                p {
-                    font-size: 1em;
-                    margin: 0px;
-                }
-            }
+        p {
+          font-size: 1em;
+          margin: 0px;
+        }
+      }
 
-            @media (max-width: 768px) or (max-height: 760px) {
-                body {
-                    font-size: 16px;
-                }
+      @media (max-width: 768px) or (max-height: 760px) {
+        body {
+          font-size: 16px;
+        }
 
-                .container {
-                    padding: 10px;
-                }
+        .container {
+          padding: 10px;
+        }
 
-                .section {
-                    margin-bottom: 20px;
-                }
+        .section {
+          margin-bottom: 20px;
+        }
 
-                h2 {
-                    font-size: 1.5em;
-                }
+        h2 {
+          font-size: 1.5em;
+        }
 
-                p {
-                    font-size: 1em;
-                }
+        p {
+          font-size: 1em;
+        }
 
-                .personal-details {
-                    display: block;
-                    position: static;
-                    width: 90%;
-                }
+        .personal-details {
+          display: block;
+          position: static;
+          width: 90%;
+        }
 
-                .cv-content {
-                    display: block;
-                    position: static;
-                }
+        .cv-content {
+          display: block;
+          position: static;
+        }
 
-                .modal-content {
-                    max-width: 80%;
-                    min-width: 240px;
-                }
+        .modal-content {
+          max-width: 80%;
+          min-width: 240px;
+        }
 
-                /* Single Column Layout for Mobile */
-                .split-container {
-                    flex-direction: column;
-                    height: auto;
-                }
+        /* Single Column Layout for Mobile */
+        .split-container {
+          flex-direction: column;
+          height: auto;
+        }
 
-                .chart {
-                    display: flex;
-                    justify-content: center;
-                }
-            }
+        .chart {
+          display: flex;
+          justify-content: center;
+        }
+      }
 
-            @keyframes rubberBand {
-                from {
-                    transform: scale3d(1, 1, 1);
-                }
-                30% {
-                    transform: scale3d(1.25, 0.75, 1);
-                }
-                40% {
-                    transform: scale3d(0.75, 1.25, 1);
-                }
-                50% {
-                    transform: scale3d(1.15, 0.85, 1);
-                }
-                65% {
-                    transform: scale3d(0.95, 1.05, 1);
-                }
-                75% {
-                    transform: scale3d(1.05, 0.95, 1);
-                }
-                to {
-                    transform: scale3d(1, 1, 1);
-                }
-            }
+      @keyframes rubberBand {
+        from {
+          transform: scale3d(1, 1, 1);
+        }
+        30% {
+          transform: scale3d(1.25, 0.75, 1);
+        }
+        40% {
+          transform: scale3d(0.75, 1.25, 1);
+        }
+        50% {
+          transform: scale3d(1.15, 0.85, 1);
+        }
+        65% {
+          transform: scale3d(0.95, 1.05, 1);
+        }
+        75% {
+          transform: scale3d(1.05, 0.95, 1);
+        }
+        to {
+          transform: scale3d(1, 1, 1);
+        }
+      }
 
-            .rubber-band {
-                animation: rubberBand 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) both;
-            }
-        </style>
-    </head>
+      .rubber-band {
+        animation: rubberBand 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+      }
+    </style>
+  </head>
 
-    <body>
-        <div class="container">
-            <div class="split-container">
-                <div class="personal-details">
-                    <h2>Your Name</h2>
-                    <p>
-                        [Your Address]<br />
-                        [City, State, Postal Code]<br />
-                        Email: [Email Address]<br />
-                        <b>Contributions</b> : <a href="https://github.com/your_pseudo" target="_blank">GitHub</a><br />
-                        <b>Profile</b> : <a href="https://www.linkedin.com/in/your_pseudo/" target="_blank">LinkedIn</a>
-                    </p>
+  <body>
+    <div class="container">
+      <div class="split-container">
+        <div class="personal-details">
+          <h2>Your Name</h2>
+          <p>
+            [Your Address]<br />
+            [City, State, Postal Code]<br />
+            Email: [Email Address]<br />
+            <b>Contributions</b> :
+            <a href="https://github.com/your_pseudo" target="_blank">GitHub</a
+            ><br />
+            <b>Profile</b> :
+            <a href="https://www.linkedin.com/in/your_pseudo/" target="_blank"
+              >LinkedIn</a
+            >
+          </p>
 
-                    <h2>Languages</h2>
-                    <p>
-                        English<br />
-                        French<br />
-                        Spanish<br />
-                    </p>
+          <h2>Languages</h2>
+          <p>
+            English<br />
+            French<br />
+            Spanish<br />
+          </p>
 
-                    <h2>Hobbies</h2>
-                    <p>
-                        Hobbies 1<br />
-                        Hobbies 2<br />
-                        Hobbies 3<br />
-                    </p>
+          <h2>Hobbies</h2>
+          <p>
+            Hobbies 1<br />
+            Hobbies 2<br />
+            Hobbies 3<br />
+          </p>
 
-                    <!-- Add more personal details as needed -->
-                </div>
-                <div class="cv-content">
-                    <div class="section education">
-                        <h2>EDUCATION</h2>
-                        <div class="chart">
-                            <canvas id="educationChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="section experience">
-                        <h2>EXPERIENCE</h2>
-                        <div class="chart">
-                            <canvas id="experienceChart"></canvas>
-                        </div>
-                        <!-- Add experience details here -->
-                    </div>
-
-                    <div class="modal" id="popupModal">
-                        <div class="modal-content">
-                            <span class="modal-close" onclick="closeModal()">&times;</span>
-                            <div id="popupContent">
-                                <!-- Popup content will be dynamically added here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <!-- Add more personal details as needed -->
         </div>
+        <div class="cv-content">
+          <div class="section education">
+            <h2>EDUCATION</h2>
+            <div class="chart">
+              <canvas id="educationChart"></canvas>
+            </div>
+          </div>
 
-        <script>
-            /*** Insert your data here ***/
+          <div class="section experience">
+            <h2>EXPERIENCE</h2>
+            <div class="chart">
+              <canvas id="experienceChart"></canvas>
+            </div>
+            <!-- Add experience details here -->
+          </div>
 
-            // Education Chart Data
-            const educationData = {
-                labels: ["School 1", "School 2", "School 3", "School 4", "School 5"],
-                datasets: [
-                    {
-                        label: "School Label",
-                        data: [20, 30, 20, 20, 10],
-                        backgroundColor: [
-                            "rgba(255, 99, 132)",
-                            "rgba(54, 162, 235)",
-                            "rgba(255, 206, 86)",
-                            "rgba(75, 192, 192)",
-                            "rgba(153, 102, 255)",
-                        ],
-                    },
-                ],
-            };
-            const educationComment = [
-                `School Comment 1.`,
-                `School Comment 2.`,
-                `School Comment 3.`,
-                `School Comment 4.`,
-                `School Comment 5.`,
-            ];
-            const educationFooter = {
-                label: "Education Footer",
-                data: [6, 2, 2, 4, 6],
-            };
+          <div class="modal" id="popupModal">
+            <div class="modal-content">
+              <span class="modal-close" onclick="closeModal()">&times;</span>
+              <div id="popupContent">
+                <!-- Popup content will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            // Experience Chart Data
-            const experienceData = {
-                labels: [
-                    "Experience 1",
-                    "Experience 2",
-                    "Experience 3",
-                    "Experience 4",
-                    "Experience 5",
-                    "Experience 6",
-                    "Experience 7",
-                    "Experience 8",
-                ],
-                datasets: [
-                    {
-                        label: "Experience Label",
-                        data: [80 / 12, 28 / 12, 38 / 12, 10 / 12, 13 / 12, 37 / 12, 13 / 12, 8 / 12],
-                        backgroundColor: [
-                            "rgba(255, 99, 132)",
-                            "rgba(54, 162, 235)",
-                            "rgba(255, 206, 86)",
-                            "rgba(75, 192, 192)",
-                            "rgba(153, 102, 255)",
-                            "rgba(255, 159, 64)",
-                            "rgba(255, 99, 132)",
-                            "rgba(54, 162, 235)",
-                        ],
-                    },
-                ],
-            };
-            const experienceComment = [
-                `Experience Comment 1.`,
-                `Experience Comment 2.`,
-                `Experience Comment 3.`,
-                `Experience Comment 4.`,
-                `Experience Comment 5.`,
-                `Experience Comment 6.`,
-                `Experience Comment 7.`,
-                `Experience Comment 8.`,
-            ];
-            const experienceFooter = {
-                label: "Experience Footer",
-                data: [
-                    "I did this",
-                    "I did that",
-                    "I did this",
-                    "I did that",
-                    "I did this",
-                    "I did that",
-                    "I did this",
-                    "I did that",
-                ],
-            };
+    <script>
+      /*** Insert your data here ***/
 
-            /*** End of data ***/
+      // Education Chart Data
+      const educationData = {
+        labels: ["School 1", "School 2", "School 3", "School 4", "School 5"],
+        datasets: [
+          {
+            label: "School Label",
+            data: [20, 30, 20, 20, 10],
+            backgroundColor: [
+              "rgba(255, 99, 132)",
+              "rgba(54, 162, 235)",
+              "rgba(255, 206, 86)",
+              "rgba(75, 192, 192)",
+              "rgba(153, 102, 255)",
+            ],
+          },
+        ],
+      };
+      const educationComment = [
+        `School Comment 1.`,
+        `School Comment 2.`,
+        `School Comment 3.`,
+        `School Comment 4.`,
+        `School Comment 5.`,
+      ];
+      const educationFooter = {
+        label: "Education Footer",
+        data: [6, 2, 2, 4, 6],
+      };
 
-            // Function to check if the browser is mobile
-            function isMobileBrowser() {
-                return /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            }
+      // Experience Chart Data
+      const experienceData = {
+        labels: [
+          "Experience 1",
+          "Experience 2",
+          "Experience 3",
+          "Experience 4",
+          "Experience 5",
+          "Experience 6",
+          "Experience 7",
+          "Experience 8",
+        ],
+        datasets: [
+          {
+            label: "Experience Label",
+            data: [
+              80 / 12,
+              28 / 12,
+              38 / 12,
+              10 / 12,
+              13 / 12,
+              37 / 12,
+              13 / 12,
+              8 / 12,
+            ],
+            backgroundColor: [
+              "rgba(255, 99, 132)",
+              "rgba(54, 162, 235)",
+              "rgba(255, 206, 86)",
+              "rgba(75, 192, 192)",
+              "rgba(153, 102, 255)",
+              "rgba(255, 159, 64)",
+              "rgba(255, 99, 132)",
+              "rgba(54, 162, 235)",
+            ],
+          },
+        ],
+      };
+      const experienceComment = [
+        `Experience Comment 1.`,
+        `Experience Comment 2.`,
+        `Experience Comment 3.`,
+        `Experience Comment 4.`,
+        `Experience Comment 5.`,
+        `Experience Comment 6.`,
+        `Experience Comment 7.`,
+        `Experience Comment 8.`,
+      ];
+      const experienceFooter = {
+        label: "Experience Footer",
+        data: [
+          "I did this",
+          "I did that",
+          "I did this",
+          "I did that",
+          "I did this",
+          "I did that",
+          "I did this",
+          "I did that",
+        ],
+      };
 
-            // Initialize tooltips with "click" trigger for both desktop and mobile
-            const tooltips = tippy(".chart", {
-                content: "Click on the graph for more details !",
-                showOnCreate: true, // Display tooltip at startup
-                delay: [1000, 500], // Add a small delay
-                duration: [500, 200], // Add a small transition
-                hideOnClick: true, // Hide tooltip only on second click
-                placement: "top", // Position the tooltip on top
-                onMount(instance) {
-                    requestAnimationFrame(() => {
-                        instance.popper.firstElementChild.classList.add("rubber-band");
-                    });
-                },
-                onHidden(instance) {
-                    instance.popper.firstElementChild.classList.remove("rubber-band");
-                },
-                popperOptions: {
-                    strategy: "fixed",
-                    modifiers: [
-                        {
-                            name: "flip",
-                            options: {
-                                fallbackPlacements: ["top"],
-                            },
-                        },
-                    ],
-                },
-            });
+      /*** End of data ***/
 
-            // Function to hide tooltip after the first click
-            function hideTooltipAfterFirstClick() {
-                tooltips.forEach((tooltip) => {
-                    tooltip.hide(); // Hide the tooltip
-                    tooltip.setProps({ trigger: "manual" }); // Change trigger to "manual"
-                });
-            }
+      // Function to check if the browser is mobile
+      function isMobileBrowser() {
+        return /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+      }
 
-            // Function to open the custom popup
-            function openPopup(label, value, comment, footer) {
-                // Hide tooltip after the first click
-                hideTooltipAfterFirstClick();
+      // Initialize tooltips with "click" trigger for both desktop and mobile
+      const tooltips = tippy(".chart", {
+        content: "Click on the graph for more details !",
+        showOnCreate: true, // Display tooltip at startup
+        delay: [1000, 500], // Add a small delay
+        duration: [500, 200], // Add a small transition
+        hideOnClick: true, // Hide tooltip only on second click
+        placement: "top", // Position the tooltip on top
+        onMount(instance) {
+          requestAnimationFrame(() => {
+            instance.popper.firstElementChild.classList.add("rubber-band");
+          });
+        },
+        onHidden(instance) {
+          instance.popper.firstElementChild.classList.remove("rubber-band");
+        },
+        popperOptions: {
+          strategy: "fixed",
+          modifiers: [
+            {
+              name: "flip",
+              options: {
+                fallbackPlacements: ["top"],
+              },
+            },
+          ],
+        },
+      });
 
-                // Get the modal
-                const modal = document.getElementById("popupModal");
-                modal.style.display = "flex";
+      // Function to hide tooltip after the first click
+      function hideTooltipAfterFirstClick() {
+        tooltips.forEach((tooltip) => {
+          tooltip.hide(); // Hide the tooltip
+          tooltip.setProps({ trigger: "manual" }); // Change trigger to "manual"
+        });
+      }
 
-                // Generate the popup content with proper styling
-                const popupContent = `
+      // Function to open the custom popup
+      function openPopup(label, value, comment, footer) {
+        // Hide tooltip after the first click
+        hideTooltipAfterFirstClick();
+
+        // Get the modal
+        const modal = document.getElementById("popupModal");
+        modal.style.display = "flex";
+
+        // Generate the popup content with proper styling
+        const popupContent = `
                   <span class="modal-close" onclick="closeModal()">&times;</span>
                   <div class="modal-label">${label}</div>
                   <div class="modal-value">${value}</div>
-                  <div class="modal-comment">${comment.replaceAll("\n", "<br>")}</div>
+                  <div class="modal-comment">${comment.replaceAll(
+                    "\n",
+                    "<br>"
+                  )}</div>
                   <div class="modal-footer">${footer}</div>
                 `;
-                const popupContentDiv = document.getElementById("popupContent");
-                popupContentDiv.innerHTML = popupContent;
+        const popupContentDiv = document.getElementById("popupContent");
+        popupContentDiv.innerHTML = popupContent;
 
-                modal.addEventListener("click", closeModalOutside);
-            }
+        modal.addEventListener("click", closeModalOutside);
+      }
 
-            // Function to close the custom popup
-            function closeModal() {
-                const modal = document.getElementById("popupModal");
-                modal.style.display = "none";
+      // Function to close the custom popup
+      function closeModal() {
+        const modal = document.getElementById("popupModal");
+        modal.style.display = "none";
 
-                modal.removeEventListener("click", closeModalOutside);
-            }
+        modal.removeEventListener("click", closeModalOutside);
+      }
 
-            // Function to close the popup when clicked outside
-            function closeModalOutside(event) {
-                if (event.target === event.currentTarget) {
-                    closeModal();
-                }
-            }
+      // Function to close the popup when clicked outside
+      function closeModalOutside(event) {
+        if (event.target === event.currentTarget) {
+          closeModal();
+        }
+      }
 
-            // Create Education Chart
-            const educationChart = new Chart(document.getElementById("educationChart").getContext("2d"), {
-                type: "doughnut",
-                data: educationData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    onClick: function (event, elements) {
-                        if (elements.length > 0) {
-                            const index = elements[0].index;
-                            const label = educationData.labels[index];
-                            const value =
-                                educationData.datasets[0].label + " : " + educationData.datasets[0].data[index] + "%";
-                            const comment = educationComment[index];
-                            const footer = educationFooter.label + " : " + educationFooter.data[index];
-                            openPopup(label, value, comment, footer);
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function (tooltipItem) {
-                                    return ` ${tooltipItem.dataset.label} : ${tooltipItem.formattedValue}%`;
-                                },
-                            },
-                        },
-                    },
+      // Create Education Chart
+      const educationChart = new Chart(
+        document.getElementById("educationChart").getContext("2d"),
+        {
+          type: "doughnut",
+          data: educationData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            onClick: function (event, elements) {
+              if (elements.length > 0) {
+                const index = elements[0].index;
+                const label = educationData.labels[index];
+                const value =
+                  educationData.datasets[0].label +
+                  " : " +
+                  educationData.datasets[0].data[index] +
+                  "%";
+                const comment = educationComment[index];
+                const footer =
+                  educationFooter.label + " : " + educationFooter.data[index];
+                openPopup(label, value, comment, footer);
+              }
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    return ` ${tooltipItem.dataset.label} : ${tooltipItem.formattedValue}%`;
+                  },
                 },
-            });
+              },
+            },
+          },
+        }
+      );
 
-            // Create Experience Chart
-            const experienceChart = new Chart(document.getElementById("experienceChart").getContext("2d"), {
-                type: "doughnut",
-                data: experienceData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    onClick: function (event, elements) {
-                        if (elements.length > 0) {
-                            const index = elements[0].index;
-                            const label = experienceData.labels[index];
-                            const number = experienceData.datasets[0].data[index];
-                            const value = experienceData.datasets[0].label + " : " + formatDate(number);
-                            const comment = experienceComment[index];
-                            const footer = experienceFooter.label + " : " + experienceFooter.data[index];
-                            openPopup(label, value, comment, footer);
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function (tooltipItem) {
-                                    return ` ${tooltipItem.dataset.label} : ${formatDate(tooltipItem.raw)}`;
-                                },
-                            },
-                        },
-                    },
+      // Create Experience Chart
+      const experienceChart = new Chart(
+        document.getElementById("experienceChart").getContext("2d"),
+        {
+          type: "doughnut",
+          data: experienceData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            onClick: function (event, elements) {
+              if (elements.length > 0) {
+                const index = elements[0].index;
+                const label = experienceData.labels[index];
+                const number = experienceData.datasets[0].data[index];
+                const value =
+                  experienceData.datasets[0].label + " : " + formatDate(number);
+                const comment = experienceComment[index];
+                const footer =
+                  experienceFooter.label + " : " + experienceFooter.data[index];
+                openPopup(label, value, comment, footer);
+              }
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    return ` ${tooltipItem.dataset.label} : ${formatDate(
+                      tooltipItem.raw
+                    )}`;
+                  },
                 },
-            });
+              },
+            },
+          },
+        }
+      );
 
-            function formatDate(months) {
-                const years = Math.floor(months / 12);
-                const remainingMonths = Math.round(months % 12);
-                return (
-                    (years ? years + " an" + (years >= 2 ? "s " : " ") : "") +
-                    (remainingMonths ? remainingMonths + " mois" : "")
-                );
-            }
+      function formatDate(months) {
+        const years = Math.floor(months / 12);
+        const remainingMonths = Math.round(months % 12);
+        return (
+          (years >= 2 ? " ans" : years ? " an" : "") +
+          (remainingMonths ? remainingMonths + " mois" : "")
+        );
+      }
 
-            // Function to set the chart size corresponding to the screen size
-            function setChartSize() {
-                const screenHeight = window.innerHeight; // Get the height of the screen
-                const screenWidth = window.innerWidth; // Get the width of the screen
+      // Function to set the chart size corresponding to the screen size
+      function setChartSize() {
+        const screenHeight = window.innerHeight; // Get the height of the screen
+        const screenWidth = window.innerWidth; // Get the width of the screen
 
-                if (screenWidth >= 768 && screenHeight >= 720) {
-                    const charts = document.querySelectorAll(".chart canvas"); // Select all chart canvases
-                    const chartWidth = Math.min(screenWidth - 350, 900); // Set a width of 900px or width minus personal details content
-                    const chartHeight = Math.min(screenHeight * 0.35, 400); // Set a height of 400px or 35% of screen height
+        if (screenWidth >= 768 && screenHeight >= 720) {
+          const charts = document.querySelectorAll(".chart canvas"); // Select all chart canvases
+          const chartWidth = Math.min(screenWidth - 350, 900); // Set a width of 900px or width minus personal details content
+          const chartHeight = Math.min(screenHeight * 0.35, 400); // Set a height of 400px or 35% of screen height
 
-                    charts.forEach(function (chart) {
-                        chart.style.width = chartWidth + "px";
-                        chart.style.height = chartHeight + "px";
-                        chart.style.margin = "auto";
-                    });
-                }
-            }
+          charts.forEach(function (chart) {
+            chart.style.width = chartWidth + "px";
+            chart.style.height = chartHeight + "px";
+            chart.style.margin = "auto";
+          });
+        }
+      }
 
-            // Call the function initially and on window resize
-            setChartSize();
-            window.addEventListener("resize", setChartSize);
+      // Call the function initially and on window resize
+      setChartSize();
+      window.addEventListener("resize", setChartSize);
 
-            // Function to configure tooltips based on screen width
-            function configureTooltips(chartOptions) {
-                const tooltipsEnabled = !isMobileBrowser();
+      // Function to configure tooltips based on screen width
+      function configureTooltips(chartOptions) {
+        const tooltipsEnabled = !isMobileBrowser();
 
-                return {
-                    ...chartOptions, // Spread existing options
-                    plugins: {
-                        ...chartOptions.plugins, // Spread existing plugins
-                        tooltip: {
-                            ...chartOptions.plugins?.tooltip, // Spread existing tooltip options (if available)
-                            enabled: tooltipsEnabled,
-                        },
-                    },
-                };
-            }
+        return {
+          ...chartOptions, // Spread existing options
+          plugins: {
+            ...chartOptions.plugins, // Spread existing plugins
+            tooltip: {
+              ...chartOptions.plugins?.tooltip, // Spread existing tooltip options (if available)
+              enabled: tooltipsEnabled,
+            },
+          },
+        };
+      }
 
-            // Configure chart tooltips based on screen width
-            function configureChartTooltips(chart) {
-                const updatedOptions = configureTooltips(chart.options);
-                chart.options = updatedOptions;
-                chart.update(); // Update the chart with new options
-            }
+      // Configure chart tooltips based on screen width
+      function configureChartTooltips(chart) {
+        const updatedOptions = configureTooltips(chart.options);
+        chart.options = updatedOptions;
+        chart.update(); // Update the chart with new options
+      }
 
-            // Call the function for each chart initially and on window resize
-            configureChartTooltips(educationChart);
-            configureChartTooltips(experienceChart);
+      // Call the function for each chart initially and on window resize
+      configureChartTooltips(educationChart);
+      configureChartTooltips(experienceChart);
 
-            window.addEventListener("resize", function () {
-                configureChartTooltips(educationChart);
-                configureChartTooltips(experienceChart);
-            });
-        </script>
-    </body>
+      window.addEventListener("resize", function () {
+        configureChartTooltips(educationChart);
+        configureChartTooltips(experienceChart);
+      });
+    </script>
+  </body>
 </html>
