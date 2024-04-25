@@ -585,7 +585,9 @@
         const years = Math.floor(months / 12);
         const remainingMonths = Math.round(months % 12);
         return (
-          (years >= 2 ? " ans" : years ? " an" : "") +
+          (years ? " an" : "") +
+          (years >= 2 ? "s" : "") +
+          " " +
           (remainingMonths ? remainingMonths + " mois" : "")
         );
       }
