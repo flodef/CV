@@ -4,646 +4,1230 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flojito Stillnet - CV</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link type="image/png" sizes="100x100" rel="icon" href="./favicon.png" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://unpkg.com/tippy.js@6"></script>
-
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"
+    />
     <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
       body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
         font-family: "Helvetica Neue", sans-serif;
-        /* Use a macOS-like font */
-        background-color: #f0f0f0;
+        background: #ffffff;
         color: #333333;
       }
 
-      .container {
-        padding: 20px;
+      #net {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        cursor: grab;
+        touch-action: none;
       }
 
-      h2 {
-        font-size: 1.8em;
+      #net.dragging {
+        cursor: grabbing;
+      }
+
+      /* ---------- bouton info ---------- */
+      #infoBtn {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        border: 1px solid #e2e8f0;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(6px);
+        color: #475569;
+        font-size: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.12);
+        transition: transform 0.15s ease, color 0.15s ease;
+        z-index: 50;
+      }
+
+      #infoBtn:hover {
+        transform: scale(1.08);
         color: #007bff;
-        /* macOS-like blue color */
       }
 
-      p {
-        font-size: 1.1em;
-        line-height: 1.5;
-        margin: 0px;
+      /* ---------- panneau info ---------- */
+      #infoPanel {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        width: 280px;
+        max-width: calc(100vw - 40px);
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.15);
+        padding: 16px 18px;
+        font-size: 0.85em;
+        color: #475569;
+        z-index: 50;
+        display: none;
+        max-height: calc(100vh - 110px);
+        overflow-y: auto;
       }
 
-      a {
-        color: #007bff;
-        text-decoration: none;
+      #infoPanel.open {
+        display: block;
+      }
+
+      #infoPanel h3 {
+        margin: 0 0 8px;
+        font-size: 0.95em;
+        color: #0f172a;
+      }
+
+      #infoPanel h4 {
+        margin: 14px 0 6px;
+        font-size: 0.8em;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #94a3b8;
+      }
+
+      .panel-close {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        cursor: pointer;
+        color: #94a3b8;
+        font-size: 16px;
+      }
+
+      .panel-close:hover {
+        color: #334155;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 6px;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        border: none;
+        background: none;
+        font: inherit;
+        color: inherit;
+        text-align: left;
+      }
+
+      .legend-item:hover {
+        background: #f1f5f9;
+      }
+
+      .legend-item.active {
+        background: #eff6ff;
+        color: #1d4ed8;
         font-weight: bold;
       }
 
-      .split-container {
-        display: flex;
-        justify-content: center;
-        margin: 0 auto;
-        height: 100vh;
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        flex: none;
       }
 
-      /* Adjust chart dimensions for better fit */
-      .chart {
-        display: flex;
-        max-width: 100%;
-        width: auto;
-        height: auto;
-        margin: 0 auto;
+      .panel-hint {
+        line-height: 1.7;
+        margin: 0;
+        padding-left: 18px;
       }
 
-      .personal-details {
+      .panel-btns {
         display: flex;
-        flex-direction: column;
-        left: 0px;
-        width: 30%;
-        position: absolute;
-        flex: 1;
-        padding: 20px;
-        background-color: #f0f0f0;
-        border-radius: 8px 0 0 8px;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
       }
 
-      .cv-content {
-        display: flex;
-        flex-direction: column;
-        left: 33%;
-        right: 20px;
-        position: absolute;
-        flex: 2;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 0 8px 8px 0;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        height: 90vh;
-        max-height: 920px;
+      .panel-btn {
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        border-radius: 7px;
+        padding: 5px 10px;
+        font-size: 0.8em;
+        color: #475569;
+        cursor: pointer;
       }
 
+      .panel-btn:hover {
+        border-color: #007bff;
+        color: #007bff;
+      }
+
+      /* ---------- modal ---------- */
       .modal {
         display: none;
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        inset: 0;
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(3px);
         align-items: center;
         justify-content: center;
-        z-index: 1000;
+        z-index: 100;
       }
 
       .modal-content {
-        background-color: #f5f5f5;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        max-width: 70%;
-        min-width: 300px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 24px 28px;
+        box-shadow: 0 10px 40px rgba(15, 23, 42, 0.18);
+        max-width: 520px;
+        width: calc(100% - 48px);
+        max-height: 82vh;
+        overflow-y: auto;
         position: relative;
       }
 
       .modal-label {
-        font-size: 1.8em;
-        color: #007bff;
+        font-size: 1.45em;
         font-weight: bold;
-        margin-bottom: 10px;
+        color: #007bff;
+        margin-bottom: 2px;
+        padding-right: 30px;
       }
 
-      .modal-value {
+      .modal-label.flo {
+        color: #0f172a;
+      }
+
+      .modal-sub {
+        font-size: 0.85em;
+        color: #64748b;
+        margin-bottom: 14px;
+      }
+
+      .meta-line {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.92em;
+        color: #334155;
+        margin-bottom: 8px;
+      }
+
+      .sector-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        border-radius: 999px;
+        padding: 3px 12px 3px 8px;
+        font-size: 0.85em;
         font-weight: bold;
-        margin-bottom: 10px;
+        color: #334155;
+        cursor: pointer;
+      }
+
+      .sector-chip:hover {
+        border-color: #94a3b8;
+      }
+
+      .sector-chip .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .meta-line .lbl {
+        color: #94a3b8;
+        font-size: 0.8em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        width: 62px;
+        flex: none;
+      }
+
+      .modal-comment {
+        font-size: 0.95em;
+        line-height: 1.55;
+        color: #334155;
+        margin: 14px 0;
       }
 
       .modal-footer {
+        font-size: 0.85em;
+        color: #64748b;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 10px;
+        line-height: 1.8;
+      }
+
+      .modal-footer a {
+        color: #007bff;
         font-weight: bold;
-        margin-top: 10px;
+      }
+
+      .modal-section {
+        margin-bottom: 12px;
+      }
+
+      .modal-section h4 {
+        margin: 0 0 4px;
+        font-size: 0.78em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+      }
+
+      .modal-section p {
+        margin: 0;
+        font-size: 0.9em;
+        line-height: 1.6;
+        color: #334155;
       }
 
       .modal-close {
         position: absolute;
-        top: 10px;
-        right: 10px;
+        top: 12px;
+        right: 14px;
         cursor: pointer;
-        font-size: 24px;
+        font-size: 22px;
+        color: #94a3b8;
+      }
+
+      .modal-close:hover {
+        color: #334155;
+      }
+
+      .map-toggle {
+        cursor: pointer;
+        color: #94a3b8;
+        font-size: 16px;
+        display: inline-flex;
+      }
+
+      .map-toggle:hover {
+        color: #007bff;
+      }
+
+      .acc-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 9px 4px;
+        border: none;
+        background: none;
+        font: inherit;
         font-weight: bold;
-        width: 24px;
-        height: 24px;
-        line-height: 1;
-        text-align: center;
+        color: #0f172a;
+        cursor: pointer;
+        text-align: left;
       }
 
-      .tippy-content {
-        font-size: 14px;
+      .acc-head .ti {
+        color: #94a3b8;
+        transition: transform 0.2s ease;
+      }
+
+      .acc.open .acc-head .ti {
+        transform: rotate(180deg);
+      }
+
+      .acc-body {
+        display: none;
+        padding-bottom: 10px;
+      }
+
+      .acc.open .acc-body {
+        display: block;
+      }
+
+      .active-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72em;
         font-weight: bold;
+        color: #047857;
+        margin: 0 0 8px;
       }
 
-      /* Disable scrolling on desktop */
-      @media (min-width: 769px) and (min-height: 761px) {
-        body {
-          overflow: hidden;
-        }
+      .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #047857;
+        animation: pulse 1.6s ease-in-out infinite;
       }
 
-      @media (max-width: 1158px) or (max-height: 826px) {
-        h2 {
-          font-size: 1.4em;
-        }
-
-        p {
-          font-size: 1em;
-          margin: 0px;
-        }
-      }
-
-      @media (max-width: 768px) or (max-height: 760px) {
-        body {
-          font-size: 16px;
-        }
-
-        .container {
-          padding: 10px;
-        }
-
-        .section {
-          margin-bottom: 20px;
-        }
-
-        h2 {
-          font-size: 1.5em;
-        }
-
-        p {
-          font-size: 1em;
-        }
-
-        .personal-details {
-          display: block;
-          position: static;
-          width: 90%;
-        }
-
-        .cv-content {
-          display: block;
-          position: static;
-        }
-
-        .modal-content {
-          max-width: 80%;
-          min-width: 240px;
-        }
-
-        /* Single Column Layout for Mobile */
-        .split-container {
-          flex-direction: column;
-          height: auto;
-        }
-
-        .chart {
-          display: flex;
-          justify-content: center;
-        }
-      }
-
-      @keyframes rubberBand {
-        from {
-          transform: scale3d(1, 1, 1);
-        }
-        30% {
-          transform: scale3d(1.25, 0.75, 1);
-        }
-        40% {
-          transform: scale3d(0.75, 1.25, 1);
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
         }
         50% {
-          transform: scale3d(1.15, 0.85, 1);
-        }
-        65% {
-          transform: scale3d(0.95, 1.05, 1);
-        }
-        75% {
-          transform: scale3d(1.05, 0.95, 1);
-        }
-        to {
-          transform: scale3d(1, 1, 1);
+          opacity: 0.35;
+          transform: scale(0.75);
         }
       }
 
-      .rubber-band {
-        animation: rubberBand 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+      .dur-pre {
+        display: inline;
+      }
+
+      @media (max-width: 600px) {
+        .dur-pre {
+          display: none;
+        }
+        .dur {
+          display: block;
+        }
+      }
+
+      @media (max-width: 600px) {
+        #infoPanel {
+          right: 12px;
+          bottom: 74px;
+          width: calc(100vw - 24px);
+        }
+
+        #infoBtn {
+          right: 14px;
+          bottom: 14px;
+        }
       }
     </style>
   </head>
 
   <body>
-    <div class="container">
-      <div class="split-container">
-        <div class="personal-details">
-          <h2>Flojito Stillnet</h2>
-          <p>
-            <b>Spécialité</b> : Applications Web, Gestion financière,
-            Blockchain<br />
-            <b>Localisation</b> : Saint-Nic, Finistère, Bretagne<br />
-            <b>Email</b> :
-            <a href="mailto:flo@fims.fi" target="_blank">flo@fims.fi</a><br />
-            <b>Contributions</b> :
-            <a href="https://github.com/flodef" target="_blank">GitHub</a> /
-            <a href="https://git.duniter.org/flodef" target="_blank">Duniter</a
-            ><br />
-            <b>Profile</b> :
-            <a href="https://www.linkedin.com/in/flodef/" target="_blank"
-              >LinkedIn</a
-            >
-          </p>
+    <canvas id="net"></canvas>
 
-          <h2>Formation</h2>
-          <p>
-            <b>Conseiller en Investissement Financier [mai 2020]</b><br />
-            Sumatra Formation Conseil<br />
-            <b>Ingénieur informatique [janvier 2005]</b><br />
-            Université de Technologie de Compiègne (UTC)<br />
-            <b>Technicien Supérieur (BTS) [juillet 2002]</b><br />
-            Lycée Victor Hugo<br />
-          </p>
+    <button id="infoBtn" title="Infos & contrôles"><i class="ti ti-info-circle"></i></button>
 
-          <h2>Langues</h2>
-          <p>
-            Français (Natif)<br />
-            Anglais (Bilingue)<br />
-            Japonais (Courant)<br />
-            Esperanto (Courant)<br />
-            Espagnol (Elémentaire)<br />
-          </p>
-        </div>
-        <div class="cv-content">
-          <div class="section education">
-            <h2>COMPÉTENCES</h2>
-            <div class="chart">
-              <canvas id="educationChart"></canvas>
-            </div>
-            <!-- Add education details here -->
-          </div>
+    <div id="infoPanel">
+      <span class="panel-close" onclick="togglePanel(false)"><i class="ti ti-x"></i></span>
+      <h3>Toile de projets</h3>
 
-          <div class="section experience">
-            <h2>EXPÉRIENCES</h2>
-            <div class="chart">
-              <canvas id="experienceChart"></canvas>
-            </div>
-            <!-- Add experience details here -->
-          </div>
+      <div class="acc open">
+        <button class="acc-head"><span>Domaines — cliquer pour filtrer</span><i class="ti ti-chevron-down"></i></button>
+        <div class="acc-body" id="legendDomains"></div>
+      </div>
+      <div class="acc">
+        <button class="acc-head"><span>Technos — cliquer pour filtrer</span><i class="ti ti-chevron-down"></i></button>
+        <div class="acc-body" id="legendTechs"></div>
+      </div>
+      <div class="acc">
+        <button class="acc-head"><span>Contrôles</span><i class="ti ti-chevron-down"></i></button>
+        <div class="acc-body">
+          <ul class="panel-hint">
+            <li>Glisser : pivoter la sphère</li>
+            <li>Molette / pincer : zoomer</li>
+            <li>Survoler un point : son nom</li>
+            <li>Cliquer un point : détails</li>
+            <li>Cliquer « Flojito » au centre : profil</li>
+          </ul>
 
-          <div class="modal" id="popupModal">
-            <div class="modal-content">
-              <span class="modal-close" onclick="closeModal()">&times;</span>
-              <div id="popupContent">
-                <!-- Popup content will be dynamically added here -->
-              </div>
-            </div>
+          <div class="panel-btns">
+            <button class="panel-btn" id="resetBtn"><i class="ti ti-refresh"></i> Vue initiale</button>
+            <button class="panel-btn" id="spinBtn"><i class="ti ti-player-pause"></i> Rotation auto</button>
           </div>
         </div>
       </div>
     </div>
 
+    <div class="modal" id="popupModal">
+      <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></span>
+        <div id="popupContent"></div>
+      </div>
+    </div>
+
     <script>
-      /*** Insert your data here ***/
-
-      // Education Chart Data
-      const educationData = {
-        labels: [
-          "Typescript / Javascript",
-          "Next.js / React",
-          "Web3",
-          "HTML5",
-          "Tailwind / CSS",
-        ],
-        datasets: [
-          {
-            label: "Utilisation",
-            data: [20, 30, 20, 20, 10],
-            backgroundColor: [
-              "rgba(255, 99, 132)",
-              "rgba(54, 162, 235)",
-              "rgba(255, 206, 86)",
-              "rgba(75, 192, 192)",
-              "rgba(153, 102, 255)",
-            ],
-          },
-        ],
+      /* ============================== DONNÉES ============================== */
+      const DOMAINS = {
+        finance: { label: "Finance & Crypto", color: "#1d4ed8" },
+        commerce: { label: "Commerce & POS", color: "#047857" },
+        web: { label: "Applications web", color: "#6d28d9" },
+        infra: { label: "Infra & perso", color: "#0e7490" },
+        legacy: { label: "Anciens projets", color: "#78716c" },
+        pro: { label: "Expériences pro", color: "#b45309" },
       };
-      const educationComment = [
-        `J'utilise Typescript et Javascript dans tous mes projets afin de construire des applications web et gérer toute la partie interactive des pages.`,
-        `Next.js et React me simplifient la génération du code serveur et le rendu client de mes applications web.\n
-                      J'utilise également React Native pour créer des applications mobiles.`,
-        `Le Web3 autorise mes applications web à gérer des paiements numériques ainsi qu'une authentification sans login / mot de passe.\n
-                      Il permet également de gérer des données décentralisées.`,
-        `HTML5 est ce qui me permet d'afficher de manière graphique mes applications web.`,
-        `CSS me facilite la mise en page et toute la partie graphique et dynamique des pages.\n
-                      Tailwind accélère le développement en me fournissant des composants graphiques prêts à l'emploi.`,
+
+      const TECHS = {
+        ts: { label: "TypeScript", color: "#3178c6" },
+        react: { label: "React", color: "#38bdf8" },
+        sql: { label: "SQL", color: "#e38c00" },
+        web3: { label: "Web3 / Solana", color: "#8b5cf6" },
+        js: { label: "JavaScript", color: "#eab308" },
+        python: { label: "Python", color: "#3776ab" },
+        rust: { label: "Rust", color: "#cd6839" },
+        php: { label: "PHP", color: "#777bb4" },
+        cpp: { label: "C++", color: "#00599c" },
+        csharp: { label: "C#", color: "#68217a" },
+        html: { label: "HTML", color: "#e34f26" },
+        ansible: { label: "Ansible", color: "#dc2626" },
+      };
+
+      const PROJECTS = [
+        // ---- Finance & Crypto ----
+        { name: "FiMs", url: "https://fims.fi", domain: "finance", start: "2017-11", end: "now", commits: 910, active: true, techs: ["ts", "react", "sql", "web3"], desc: "Plateforme d'investissement : finance traditionnelle (TradFi), décentralisée (DeFi) et paiements crypto, autour d'une communauté. Interface web multi-plateforme, POS Solana Pay, communication Discord / Twitter / Medium." },
+        { name: "FiMs-Wallet-V3", url: "https://github.com/flodef/FiMs-Wallet-V3", domain: "finance", start: "2026-09", end: "now", commits: 1040, active: true, techs: ["ts", "react", "web3"], desc: "Wallet communautaire FiMs : portfolio, dons et tontine sur Solana." },
+        { name: "FiMs-Wallet", url: "https://github.com/flodef/FiMs-Wallet", domain: "finance", start: "2023-12", end: "2026-10", commits: 606, active: true, techs: ["ts", "web3"], desc: "Wallet Solana pour les tokens FiMs — précurseur du V3." },
+        { name: "FiMs-Pay", url: "https://github.com/flodef/FiMs-Pay", domain: "finance", start: "2022-07", end: "2023-09", commits: 1237, techs: ["ts", "web3"], desc: "Standard de paiement décentralisé basé sur Solana Pay — base du module Pay de FiMs." },
+        { name: "kamino-monitor", url: "https://github.com/flodef/kamino-monitor", domain: "finance", start: "2024-11", end: "2026-04", commits: 34, techs: ["ts", "react", "web3"], desc: "Monitoring temps réel des positions FiMs sur Kamino (prêts Solana) : prix, statuts de prêt/emprunt, alertes, sélecteur de RPC." },
+        { name: "solana-pay-starter", url: "https://github.com/flodef/solana-pay-starter", domain: "finance", start: "2022-05", end: "2022-11", commits: 11, techs: ["js", "web3"], desc: "Boutique en ligne avec Solana Pay — point de départ de FiMs-Pay." },
+        { name: "FiMs-Token", url: "https://github.com/flodef/FiMs-Token", domain: "finance", start: "2024-01", end: "2024-12", commits: 23, techs: ["web3"], desc: "Métadonnées et documentation du token FiMs." },
+
+        // ---- Commerce & POS ----
+        { name: "Tradiz", url: "https://tradiz.fr", domain: "commerce", start: "2023-06", end: "now", commits: 1816, active: true, techs: ["ts", "react", "sql"], desc: "Caisse enregistreuse / point de vente pour commerces : tickets, stocks, factures, gestion multi-postes." },
+        { name: "Job-Conciergerie", url: "https://job-conciergerie.fr", domain: "commerce", start: "2025-02", end: "now", commits: 1600, active: true, techs: ["ts", "react", "sql"], desc: "Job board : les conciergeries immobilières publient leurs biens et délèguent des missions (ménage, réception, etc.) à des prestataires." },
+        { name: "digi-carte-deploy", url: "https://gitlab.com/edouard.bonnefille/digi-carte-deploy", domain: "commerce", start: "2026-01", end: "now", commits: 200, active: true, techs: ["ansible", "ts"], desc: "Déploiement automatisé des cartes digitales de restaurants : Ansible, WireGuard, VPS, monitoring." },
+        { name: "dc-admin", url: "https://gitlab.com/edouard.bonnefille/dc-admin", domain: "commerce", start: "2025-12", end: "now", commits: 200, active: true, techs: ["ts", "react"], desc: "Back-office d'administration Digi-Carte (menu digital QR pour restaurants)." },
+        { name: "dc-gsws", url: "https://gitlab.com/edouard.bonnefille/dc-gsws", domain: "commerce", start: "2025-12", end: "now", commits: 49, active: true, techs: ["ts"], desc: "Composant backend Digi-Carte." },
+        { name: "dc-menu", url: "https://gitlab.com/edouard.bonnefille/dc-menu", domain: "commerce", start: "2025-12", end: "2026-03", commits: 28, techs: ["ts", "react"], desc: "Menu digital accessible par QR code — Digi-Carte." },
+        { name: "Invoice-management-system", url: "https://github.com/flodef/Invoice-management-system", domain: "commerce", start: "2025-07", end: "now", commits: 116, active: true, techs: ["ts", "react"], desc: "Gestion de factures : frontend Vite + backend Convex." },
+        { name: "simpos", url: "https://github.com/flodef/simpos", domain: "commerce", start: "2025-08", end: "2025-08", commits: 44, techs: ["ts", "react"], desc: "Client POS moderne en React pour backend Odoo — base d'expérimentation de Tradiz." },
+        { name: "Tradiz-Web", url: "https://github.com/flodef/Tradiz-Web", domain: "commerce", start: "2024-02", end: "2024-02", commits: 2, techs: ["ts"], desc: "Première version web de Tradiz." },
+        { name: "opensourcepos", url: "https://github.com/flodef/opensourcepos", domain: "commerce", start: "2014-11", end: "2015-01", commits: 198, techs: ["php", "sql"], desc: "Open Source Point of Sale — premier POS web (PHP), ancêtre de Tradiz." },
+
+        // ---- Applications web ----
+        { name: "tidy-quest", url: "https://github.com/flodef/tidy-quest", domain: "web", start: "2026-09", end: "now", commits: 96, active: true, techs: ["ts", "react"], desc: "PWA heroic-fantasy de tri d'emails : missives à expédier, quêtes/tâches, agenda, notifications push, mode hors-ligne." },
+        { name: "poeme", url: "https://github.com/flodef/poeme", domain: "web", start: "2026-11", end: "now", commits: 10, active: true, techs: ["ts", "react"], desc: "Site de poèmes « en polaroids » : écriture, publication et médiathèque." },
+        { name: "3kiffs", url: "https://github.com/flodef/3kiffs", domain: "web", start: "2026-07", end: "now", commits: 80, active: true, techs: ["ts", "react"], desc: "Application journal / mémoire (construite avec v0)." },
+        { name: "cmd.bzh", url: "https://github.com/flodef/cmd.bzh", domain: "web", start: "2024-09", end: "now", commits: 160, active: true, techs: ["ts", "react"], desc: "Site personnel / vitrine professionnelle cmd.bzh." },
+        { name: "valentin-ostheo", url: "https://github.com/flodef/valentin-ostheo", domain: "web", start: "2025-05", end: "2025-07", commits: 37, techs: ["html"], desc: "Site vitrine pour un ostéopathe (pages statiques)." },
+        { name: "anniversaire-amandine", url: "https://github.com/flodef/anniversaire-amandine", domain: "web", start: "2026-10", end: "now", commits: 32, active: true, techs: ["html"], desc: "Site événementiel d'anniversaire." },
+        { name: "GrateWizard", url: "https://github.com/flodef/GrateWizard", domain: "web", start: "2024-03", end: "2025-09", commits: 23, techs: ["ts", "react"], desc: "Outil assistant de prix (PriceWizard)." },
+        { name: "nextjs-chat", url: "https://github.com/flodef/nextjs-chat", domain: "web", start: "2023-12", end: "2023-12", commits: 1, techs: ["ts", "react"], desc: "Chat temps réel Next.js (test)." },
+        { name: "CV", url: "https://github.com/flodef/CV", domain: "web", start: "2023-08", end: "2024-04", commits: 14, techs: ["html"], desc: "CV open-source — la page que vous regardez, version initiale." },
+
+        // ---- Infra & perso ----
+        { name: "ha-config", url: "https://github.com/flodef/ha-config", domain: "infra", start: "2026-11", end: "now", commits: 230, active: true, techs: ["python"], desc: "Configuration Home Assistant de la maison : automations, dashboards, capteurs." },
+        { name: "warren-contract", url: "https://github.com/WarrenBrowse/warren-contract", domain: "infra", start: "2026-09", end: "2026-09", commits: 133, active: true, techs: ["rust"], desc: "Contrat client↔serveur neutre pour le VPN Warren (codec SS58, DTO HTTP /v1) — collaboration avec WarrenBrowse." },
+        { name: "flodef.github.io", url: "https://github.com/flodef/flodef.github.io", domain: "infra", start: "2026-10", end: "2026-10", commits: 1, active: true, techs: ["html"], desc: "Page de profil GitHub." },
+        { name: "flodef", url: "https://github.com/flodef/flodef", domain: "infra", start: "2025-06", end: "2025-06", commits: 2, techs: [], desc: "Profil GitHub (README)." },
+
+        // ---- Expériences pro ----
+        { name: "Parexel", domain: "pro", start: "2004-03", end: "2004-11", w: 0.019, techs: ["html", "js", "sql"], desc: "Stage : intranet de gestion de données de l'industrie pharmaceutique — médicaments, validité, stocks. Application multipostes automatisant les calculs." },
+        { name: "F4 Group", domain: "pro", start: "2004-11", end: "2005-12", w: 0.021, techs: ["cpp"], desc: "Composants d'interface « homme-machine » (menus, sons, animations) pour jeux vidéo. Outil de gestion de projets pour les développeurs de jeux." },
+        { name: "Nestlé", domain: "pro", start: "2005-12", end: "2009-01", w: 0.031, techs: ["csharp", "sql", "cpp"], desc: "Logiciel de chargement de données dans SAP, interfacé avec une base de données. Gestion des données de production et des stocks de produits finis." },
+        { name: "Groupe PSA", domain: "pro", start: "2009-01", end: "2010-02", w: 0.021, techs: ["csharp", "sql"], desc: "Logiciel de gestion des factures fournisseurs et clients, avoirs et litiges pour le service comptable. Automatisation du chargement et de la transformation des données." },
+        { name: "Renault F1", domain: "pro", start: "2010-02", end: "2010-12", w: 0.020, techs: ["csharp"], desc: "Logiciel de simulation d'essais de Formule 1 pour réduire le recours à des essais. Application de calcul des données de piste en temps réel." },
+        { name: "Itesoft", domain: "pro", start: "2010-12", end: "2014-02", w: 0.031, techs: ["csharp", "sql"], desc: "Logiciel d'aide à la dématérialisation de documents papiers depuis une interface web." },
+        { name: "Alter'Éco 30", domain: "pro", start: "2014-02", end: "2016-06", w: 0.027, techs: ["php", "js", "html", "sql"], desc: "Système de caisse automatique pour une bio coopérative en autogestion. Cahier des charges et prototype de monnaie locale électronique. Création des sites web et intranet." },
+
+        // ---- Anciens projets ----
+        { name: "attract", url: "https://github.com/flodef/attract", domain: "legacy", start: "2018-01", end: "2018-06", commits: 798, techs: ["cpp"], desc: "Frontend graphique pour émulateurs de ligne de commande (C++)." },
+        { name: "cesium_website", url: "https://github.com/flodef/cesium_website", domain: "legacy", start: "2023-07", end: "2023-07", commits: 291, techs: ["html"], desc: "Site vitrine Duniter / Cesium." },
+        { name: "Duniter", url: "https://git.duniter.org/flodef", domain: "legacy", start: "2019-01", end: "2021-12", commits: 300, techs: ["rust", "js"], desc: "Contributions à la blockchain Duniter (nœud Rust) et au wallet web Cesium. Dates approximatives." },
+        { name: "angle-assets", url: "https://github.com/flodef/angle-assets", domain: "legacy", start: "2022-07", end: "2022-07", commits: 19, techs: [], desc: "Assets de branding Angle." },
+        { name: "head-elements", url: "https://github.com/flodef/head-elements", domain: "legacy", start: "2023-08", end: "2023-08", commits: 1, techs: ["html"], desc: "Snippet d'éléments HTML de head." },
+        { name: "ginkgo", url: "https://git.duniter.org/flodef/ginkgo", domain: "legacy", start: "2023-07", end: "2024-05", commits: 100, techs: ["rust"], desc: "Projet Duniter « ginkgo » (git.duniter.org)." },
       ];
-      const educationFooter = {
-        label: "Projets",
-        data: [6, 2, 2, 4, 6],
+
+      const PROFILE = {
+        name: "Flojito Stillnet",
+        birth: "1982-04-06",
+        role: "Applications Web · Gestion financière · Blockchain",
+        location: "Saint-Nic, Finistère, Bretagne",
+        email: "flo@fims.fi",
+        links: [
+          ["GitHub", "https://github.com/flodef"],
+          ["GitLab", "https://gitlab.com/flodef"],
+          ["Duniter", "https://git.duniter.org/flodef"],
+        ],
+        formation: [
+          ["Conseiller en Investissement Financier", "Sumatra Formation Conseil — 2020"],
+          ["Ingénieur informatique", "Université de Technologie de Compiègne (UTC) — 2005"],
+          ["Technicien Supérieur (BTS)", "Lycée Victor Hugo — 2002"],
+        ],
+        languages: "Français (natif) · Anglais (bilingue) · Japonais (courant) · Esperanto (courant) · Espagnol (élémentaire)",
+        passions: "Acroyoga / danse improvisation · Escalade · Poésie",
       };
 
-      // Experience Chart Data
-      const experienceData = {
-        labels: [
-          "FiMs",
-          "Alter'Éco 30",
-          "Itesoft",
-          "Renault F1",
-          "Groupe PSA",
-          "Nestlé",
-          "F4 Group",
-          "Parexel",
-        ],
-        datasets: [
-          {
-            label: "Durée",
-            data: [
-              (new Date() - new Date("2016-06-01")) / 2628000000, // Autoupdate the time spent according to current date
-              28,
-              38,
-              10,
-              13,
-              37,
-              13,
-              8,
-            ],
-            backgroundColor: [
-              "rgba(255, 99, 132)",
-              "rgba(54, 162, 235)",
-              "rgba(255, 206, 86)",
-              "rgba(75, 192, 192)",
-              "rgba(153, 102, 255)",
-              "rgba(255, 159, 64)",
-              "rgba(255, 99, 132)",
-              "rgba(54, 162, 235)",
-            ],
-          },
-        ],
+      /* ============================== MOTEUR 3D ============================== */
+      const canvas = document.getElementById("net");
+      const ctx = canvas.getContext("2d");
+      const TAU = Math.PI * 2;
+      const NOW = Date.now();
+
+      const parseDate = (s) => (s === "now" ? NOW : Date.parse(s + "-01"));
+      const months = (a, b) => Math.max(1, Math.round((b - a) / 2628000000));
+      const fmtDate = (s) => {
+        const [y, m] = s.split("-");
+        const names = ["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+        return names[+m - 1] + " " + y;
       };
-      const experienceComment = [
-        `Système de gestion financière permettant de faire des investissements en Finance Traditionnelle (TradFi) et en Finance Décentralisée (DeFi).\n
-            Création d'une interface web moderne multi-plateforme pour gérer ses placements.\n
-            Réalisation d'un système de paiement (POS) basé sur Solana Pay.\n
-            Gestion de la communication pour une communauté d'investisseurs (Discord, Twitter, Medium).`,
-        `Mise en place d'un système de caisse automatique pour la gestion d'une bio coopérative en auto gestion.\n
-            Élaboration d'un cahier des charges, ainsi qu'un prototype de monnaie locale sous forme électronique.\n
-            Création des sites web et intranet.`,
-        `Logiciel d’aide à la dématérialisation de documents papiers depuis une interface web.\n`,
-        `Logiciel de simulation d’essai de Formule 1 visant à réduire le recours à des essais\n
-                      Application de calcul des données de piste en temps réel.`,
-        `Logiciel de gestion des factures fournisseurs et clients ainsi que des avoirs et des litiges pour le service comptable du constructeur automobile.\n
-                      Automatisation des processus répétitifs de chargement et transformation des données brutes en données exploitables.`,
-        `Logiciel de chargement de données dans SAP, interfacé avec une base de données.\n
-                      Gestion des données de production et des stocks de produits finis.`,
-        `Composants d'interface « homme machine » (menus, sons, animations) à intégrer dans des jeux vidéo.\n
-                      Création d'un outil de gestion de projets pour les développeurs de jeux vidéo.`,
-        `Intranet de gestion de données de l’industrie pharmaceutique : médicaments, validité, stocks.\n
-                      Élaboration d’une application de gestion de données multipostes automatisant les calculs et gérant un suivi pointu d’accès aux données.`,
-      ];
-      const experienceFooter = {
-        label: "Langages",
-        data: [
-          `Typescript, Next.js, React, Web3, HTML5, Tailwind, CSS, Firebase, Solana`,
-          `PHP, Javascript, HTML, CSS, MySQL, WordPress`,
-          `C#, WPF, SQL`,
-          `C#, WPF, Batch DOS`,
-          `C#, WPF, XAML, Silverlight, SQL`,
-          `C#, SQL, C++, VBA, Batch DOS`,
-          `C++, DirectX`,
-          `HTML, XML, ASP, Javascript, SQL`,
-        ],
-      };
+      const hexRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+      const lerp = (a, b, t) => a + (b - a) * t;
 
-      /*** End of data ***/
+      // ---- nodes ----
+      const domainKeys = Object.keys(DOMAINS);
+      const domainIndex = {};
+      domainKeys.forEach((k, i) => (domainIndex[k] = i));
 
-      // Function to check if the browser is mobile
-      function isMobileBrowser() {
-        return /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        );
-      }
+      let seed = 42;
+      const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 
-      // Initialize tooltips with "click" trigger for both desktop and mobile
-      const tooltips = tippy(".chart", {
-        content: "Cliquez sur le graphique pour plus de détails !",
-        showOnCreate: true, // Display tooltip at startup
-        delay: [1000, 500], // Add a small delay
-        duration: [500, 200], // Add a small transition
-        hideOnClick: true, // Hide tooltip only on second click
-        placement: "top", // Position the tooltip on top
-        onMount(instance) {
-          requestAnimationFrame(() => {
-            instance.popper.firstElementChild.classList.add("rubber-band");
-          });
-        },
-        onHidden(instance) {
-          instance.popper.firstElementChild.classList.remove("rubber-band");
-        },
-        popperOptions: {
-          strategy: "fixed",
-          modifiers: [
-            {
-              name: "flip",
-              options: {
-                fallbackPlacements: ["top"],
-              },
-            },
-          ],
-        },
+      const centers = domainKeys.map((_, i) => {
+        const y = 1 - (i / (domainKeys.length - 1)) * 2;
+        const r = Math.sqrt(Math.max(0, 1 - y * y));
+        const th = i * 2.399963;
+        return [Math.cos(th) * r, y, Math.sin(th) * r];
+      });
+      const bases = centers.map((c) => {
+        const up = Math.abs(c[1]) > 0.9 ? [1, 0, 0] : [0, 1, 0];
+        let u = [
+          up[1] * c[2] - up[2] * c[1],
+          up[2] * c[0] - up[0] * c[2],
+          up[0] * c[1] - up[1] * c[0],
+        ];
+        const ul = Math.hypot(...u) || 1;
+        u = u.map((v) => v / ul);
+        const v = [
+          c[1] * u[2] - c[2] * u[1],
+          c[2] * u[0] - c[0] * u[2],
+          c[0] * u[1] - c[1] * u[0],
+        ];
+        return [u, v];
       });
 
-      // Function to hide tooltip after the first click
-      function hideTooltipAfterFirstClick() {
-        tooltips.forEach((tooltip) => {
-          tooltip.hide(); // Hide the tooltip
-          tooltip.setProps({ trigger: "manual" }); // Change trigger to "manual"
+      const byDomain = {};
+      PROJECTS.forEach((p) => {
+        (byDomain[p.domain] = byDomain[p.domain] || []).push(p);
+      });
+      Object.values(byDomain).forEach((arr) =>
+        arr.sort((a, b) => parseDate(a.start) - parseDate(b.start))
+      );
+
+      const nodes = PROJECTS.map((p) => {
+        const di = domainIndex[p.domain];
+        const list = byDomain[p.domain];
+        const idx = list.indexOf(p);
+        const n = list.length;
+        const spread = 0.16 + 0.62 * Math.sqrt(idx / Math.max(1, n - 1));
+        const ang = idx * 2.399963 + rand() * 0.6;
+        const [u, v] = bases[di];
+        const c = centers[di];
+        const jx = (rand() - 0.5) * 0.08, jy = (rand() - 0.5) * 0.08, jz = (rand() - 0.5) * 0.08;
+        let pos = [
+          c[0] + (u[0] * Math.cos(ang) + v[0] * Math.sin(ang)) * spread + jx,
+          c[1] + (u[1] * Math.cos(ang) + v[1] * Math.sin(ang)) * spread + jy,
+          c[2] + (u[2] * Math.cos(ang) + v[2] * Math.sin(ang)) * spread + jz,
+        ];
+        const pl = Math.hypot(...pos);
+        pos = pos.map((x) => x / pl);
+
+        const endT = parseDate(p.end);
+        const ageYears = Math.max(0, (NOW - endT) / 31557600000);
+        const radiusFactor = 0.68 + 0.32 / (1 + ageYears / 5);
+        pos = pos.map((x) => x * radiusFactor);
+
+        const wr = p.w ?? 0.009 + 0.028 * Math.sqrt((p.commits || 0) / 2000);
+        return {
+          ...p,
+          pos,
+          radiusFactor,
+          wr,
+          color: DOMAINS[p.domain].color,
+          isFlo: false,
+          sx: 0, sy: 0, depth: 0, px: 0,
+        };
+      });
+
+      // ---- Flo au centre, relié à tout ----
+      const FLO_IDX = nodes.length;
+      nodes.push({
+        name: "Flojito",
+        pos: [0, 0, 0],
+        wr: 0.034,
+        color: "#0f172a",
+        isFlo: true,
+        end: "now",
+        domain: "flo",
+        sx: 0, sy: 0, depth: 0, px: 0,
+      });
+
+      // ---- edges ----
+      const edges = [];
+      const nodeIdx = {};
+      nodes.forEach((n, i) => (nodeIdx[n.name] = i));
+
+      Object.values(byDomain).forEach((list) => {
+        for (let i = 0; i < list.length - 1; i++) {
+          const a = nodeIdx[list[i].name], b = nodeIdx[list[i + 1].name];
+          const shared = list[i].techs.filter((t) => list[i + 1].techs.includes(t));
+          edges.push({ a, b, w: 1 + Math.min(1.5, shared.length * 0.5), chrono: false, flo: false });
+        }
+      });
+      for (let i = 0; i < FLO_IDX; i++) {
+        for (let j = i + 1; j < FLO_IDX; j++) {
+          if (nodes[i].domain === nodes[j].domain) continue;
+          const shared = nodes[i].techs.filter((t) => nodes[j].techs.includes(t));
+          if (shared.length >= 2) {
+            edges.push({ a: i, b: j, w: 0.8 + shared.length * 0.4, chrono: false, flo: false });
+          }
+        }
+      }
+      const chronoSorted = [...nodes.slice(0, FLO_IDX)].sort(
+        (a, b) => parseDate(a.start) - parseDate(b.start)
+      );
+      for (let i = 0; i < chronoSorted.length - 1; i++) {
+        edges.push({
+          a: nodeIdx[chronoSorted[i].name],
+          b: nodeIdx[chronoSorted[i + 1].name],
+          w: 0.35,
+          chrono: true,
+          flo: false,
         });
       }
-
-      // Function to open the custom popup
-      function openPopup(label, value, comment, footer) {
-        // Hide tooltip after the first click
-        hideTooltipAfterFirstClick();
-
-        // Get the modal
-        const modal = document.getElementById("popupModal");
-        modal.style.display = "flex";
-
-        // Generate the popup content with proper styling
-        const popupContent = `
-                  <span class="modal-close" onclick="closeModal()">&times;</span>
-                  <div class="modal-label">${label}</div>
-                  <div class="modal-value">${value}</div>
-                  <div class="modal-comment">${comment.replaceAll(
-                    "\n",
-                    "<br>"
-                  )}</div>
-                  <div class="modal-footer">${footer}</div>
-                `;
-        const popupContentDiv = document.getElementById("popupContent");
-        popupContentDiv.innerHTML = popupContent;
-
-        modal.addEventListener("click", closeModalOutside);
+      // spokes Flo → chaque projet
+      for (let i = 0; i < FLO_IDX; i++) {
+        edges.push({ a: FLO_IDX, b: i, w: 0.2, chrono: false, flo: true });
       }
 
-      // Function to close the custom popup
-      function closeModal() {
-        const modal = document.getElementById("popupModal");
-        modal.style.display = "none";
+      /* ---- état ---- */
+      let W = 0, H = 0, DPR = 1;
+      function resize() {
+        DPR = Math.min(window.devicePixelRatio || 1, 2);
+        W = canvas.clientWidth;
+        H = canvas.clientHeight;
+        canvas.width = W * DPR;
+        canvas.height = H * DPR;
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      }
+      window.addEventListener("resize", resize);
+      resize();
 
-        modal.removeEventListener("click", closeModalOutside);
+      const YAW0 = 0.8, PITCH0 = 0.2, ZOOM0 = 1;
+      let yaw = YAW0, pitch = PITCH0;
+      let vyaw = 0, vpitch = 0;
+      const CAM = 3;
+      let zoom = ZOOM0, targetZoom = ZOOM0;
+      let autoSpin = true;
+      let lastInteract = 0;
+      let hovered = -1;
+      let activeFilter = null; // { kind: 'domain'|'tech', key } | null
+      let camAnim = null;
+      let dragging = false;
+      let lastX = 0, lastY = 0, downX = 0, downY = 0, downT = 0;
+
+      function rotatePoint(p) {
+        const cy = Math.cos(yaw), sy = Math.sin(yaw);
+        let x = p[0] * cy + p[2] * sy;
+        let z = -p[0] * sy + p[2] * cy;
+        let y = p[1];
+        const cp = Math.cos(pitch), sp = Math.sin(pitch);
+        const y2 = y * cp - z * sp;
+        const z2 = y * sp + z * cp;
+        return [x, y2, z2];
       }
 
-      // Function to close the popup when clicked outside
-      function closeModalOutside(event) {
-        if (event.target === event.currentTarget) {
-          closeModal();
-        }
-      }
-
-      // Create Education Chart
-      const educationChart = new Chart(
-        document.getElementById("educationChart").getContext("2d"),
-        {
-          type: "doughnut",
-          data: educationData,
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            onClick: function (event, elements) {
-              if (elements.length > 0) {
-                const index = elements[0].index;
-                const label = educationData.labels[index];
-                const value =
-                  educationData.datasets[0].label +
-                  " : " +
-                  educationData.datasets[0].data[index] +
-                  "%";
-                const comment = educationComment[index];
-                const footer =
-                  educationFooter.label + " : " + educationFooter.data[index];
-                openPopup(label, value, comment, footer);
-              }
-            },
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  label: function (tooltipItem) {
-                    return ` ${tooltipItem.dataset.label} : ${tooltipItem.formattedValue}%`;
-                  },
-                },
-              },
-            },
-          },
-        }
-      );
-
-      // Create Experience Chart
-      const experienceChart = new Chart(
-        document.getElementById("experienceChart").getContext("2d"),
-        {
-          type: "doughnut",
-          data: experienceData,
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            onClick: function (event, elements) {
-              if (elements.length > 0) {
-                const index = elements[0].index;
-                const label = experienceData.labels[index];
-                const number = experienceData.datasets[0].data[index];
-                const value =
-                  experienceData.datasets[0].label + " : " + formatDate(number);
-                const comment = experienceComment[index];
-                const footer =
-                  experienceFooter.label + " : " + experienceFooter.data[index];
-                openPopup(label, value, comment, footer);
-              }
-            },
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  label: function (tooltipItem) {
-                    return ` ${tooltipItem.dataset.label} : ${formatDate(
-                      tooltipItem.raw
-                    )}`;
-                  },
-                },
-              },
-            },
-          },
-        }
-      );
-
-      function formatDate(months) {
-        const years = Math.floor(months / 12);
-        const remainingMonths = Math.round(months % 12);
-        return (
-          (years ? " an" : "") +
-          (years >= 2 ? "s" : "") +
-          " " +
-          (remainingMonths ? remainingMonths + " mois" : "")
-        );
-      }
-
-      // Function to set the chart size corresponding to the screen size
-      function setChartSize() {
-        const screenHeight = window.innerHeight; // Get the height of the screen
-        const screenWidth = window.innerWidth; // Get the width of the screen
-
-        if (screenWidth >= 768 && screenHeight >= 720) {
-          const charts = document.querySelectorAll(".chart canvas"); // Select all chart canvases
-          const chartWidth = Math.min(screenWidth - 350, 900); // Set a width of 900px or width minus personal details content
-          const chartHeight = Math.min(screenHeight * 0.35, 400); // Set a height of 400px or 35% of screen height
-
-          charts.forEach(function (chart) {
-            chart.style.width = chartWidth + "px";
-            chart.style.height = chartHeight + "px";
-            chart.style.margin = "auto";
-          });
-        }
-      }
-
-      // Call the function initially and on window resize
-      setChartSize();
-      window.addEventListener("resize", setChartSize);
-
-      // Function to configure tooltips based on screen width
-      function configureTooltips(chartOptions) {
-        const tooltipsEnabled = !isMobileBrowser();
-
+      function project(p) {
+        const r = rotatePoint(p);
+        const s = CAM / (CAM - r[2]);
+        const Rpx = Math.min(W, H) * 0.38 * zoom;
         return {
-          ...chartOptions, // Spread existing options
-          plugins: {
-            ...chartOptions.plugins, // Spread existing plugins
-            tooltip: {
-              ...chartOptions.plugins?.tooltip, // Spread existing tooltip options (if available)
-              enabled: tooltipsEnabled,
-            },
-          },
+          x: W / 2 + r[0] * s * Rpx,
+          y: H / 2 - r[1] * s * Rpx,
+          z: r[2],
+          s,
+          Rpx,
         };
       }
 
-      // Configure chart tooltips based on screen width
-      function configureChartTooltips(chart) {
-        const updatedOptions = configureTooltips(chart.options);
-        chart.options = updatedOptions;
-        chart.update(); // Update the chart with new options
+      const isDimmed = (n) => {
+        if (!activeFilter || n.isFlo) return false;
+        return activeFilter.kind === "domain"
+          ? n.domain !== activeFilter.key
+          : !n.techs.includes(activeFilter.key);
+      };
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        if (!dragging) {
+          if (camAnim) {
+            yaw += (camAnim.ty - yaw) * 0.07;
+            pitch += (camAnim.tp - pitch) * 0.07;
+            if (Math.abs(camAnim.ty - yaw) < 0.003 && Math.abs(camAnim.tp - pitch) < 0.003) camAnim = null;
+          }
+          yaw += vyaw;
+          pitch += vpitch;
+          vyaw *= 0.96;
+          vpitch *= 0.96;
+          pitch = Math.max(-1.45, Math.min(1.45, pitch));
+          if (autoSpin && !activeFilter && !camAnim && performance.now() - lastInteract > 4000) yaw += 0.0012;
+        }
+        zoom += (targetZoom - zoom) * 0.1;
+
+        nodes.forEach((n) => {
+          const pr = project(n.pos);
+          n.sx = pr.x; n.sy = pr.y; n.depth = pr.z;
+          n.px = n.wr * pr.s * pr.Rpx;
+        });
+
+        // edges
+        ctx.lineWidth = 1;
+        for (const e of edges) {
+          const a = nodes[e.a], b = nodes[e.b];
+          const dimA = isDimmed(a), dimB = isDimmed(b);
+          if (activeFilter && dimA && dimB) continue;
+          const depthFade = Math.min(1, Math.max(0.15, (a.depth + b.depth + 2) / 4));
+
+          if (e.flo) {
+            // spokes vers Flo : visibles seulement vers le domaine filtré
+            if (activeFilter) {
+              if (dimB) continue;
+              ctx.strokeStyle = `rgba(100,116,139,${0.28 * depthFade})`;
+            } else {
+              ctx.strokeStyle = `rgba(148,163,184,${0.12 * depthFade})`;
+            }
+            ctx.setLineDash([]);
+          } else if (e.chrono) {
+            ctx.strokeStyle = `rgba(148,163,184,${0.35 * depthFade * (dimA || dimB ? 0.3 : 1)})`;
+            ctx.setLineDash([3, 4]);
+          } else {
+            const ca = hexRgb(a.isFlo ? "#94a3b8" : a.color);
+            const cb = hexRgb(b.isFlo ? "#94a3b8" : b.color);
+            const t = 0.5;
+            const cr = ca.map((v, i) => Math.round(lerp(v, cb[i], t)));
+            const alpha = Math.min(0.4, 0.05 + e.w * 0.09) * depthFade * (dimA || dimB ? 0.25 : 1);
+            ctx.strokeStyle = `rgba(${cr.join(",")},${alpha})`;
+            ctx.setLineDash([]);
+          }
+          ctx.beginPath();
+          ctx.moveTo(a.sx, a.sy);
+          const mx = (a.sx + b.sx) / 2, my = (a.sy + b.sy) / 2;
+          const dx = b.sx - a.sx, dy = b.sy - a.sy;
+          const len = Math.hypot(dx, dy) || 1;
+          const bow = e.flo ? 0 : Math.min(14, len * 0.12) * (e.chrono ? 0.4 : 1);
+          ctx.quadraticCurveTo(mx - (dy / len) * bow, my + (dx / len) * bow, b.sx, b.sy);
+          ctx.stroke();
+        }
+        ctx.setLineDash([]);
+
+        // nodes back-to-front
+        const order = nodes.map((n, i) => i).sort((a, b) => nodes[a].depth - nodes[b].depth);
+        const frontness = (d) => Math.max(0, Math.min(1, (d + 1) / 2));
+
+        for (const i of order) {
+          const n = nodes[i];
+          const facing = n.isFlo ? 1 : frontness(n.depth);
+          const eraAlpha = n.isFlo || n.end === "now" ? 1 : Math.max(0.35, 1 - (NOW - parseDate(n.end)) / 31557600000 / 14);
+          let alpha = (0.3 + 0.7 * facing) * eraAlpha;
+          const dimmed = isDimmed(n);
+          if (dimmed) alpha *= 0.07;
+          const emph = activeFilter && !dimmed && !n.isFlo;
+          const r = Math.max(1.6, n.px) * (emph ? 1.18 : 1);
+
+          if (n.active || n.isFlo) {
+            ctx.beginPath();
+            ctx.arc(n.sx, n.sy, r + 3.5, 0, TAU);
+            ctx.strokeStyle = `rgba(255,255,255,${0.9 * alpha})`;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(n.sx, n.sy, r + 1.5, 0, TAU);
+            ctx.strokeStyle = n.color;
+            ctx.globalAlpha = alpha;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+          }
+
+          ctx.beginPath();
+          ctx.arc(n.sx, n.sy, r, 0, TAU);
+          ctx.fillStyle = n.color;
+          ctx.globalAlpha = alpha;
+          if (n.active || n.isFlo || emph) {
+            ctx.shadowColor = n.color;
+            ctx.shadowBlur = emph ? 16 : n.isFlo ? 14 : 8 * facing;
+          }
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 1;
+
+          if (emph) {
+            ctx.beginPath();
+            ctx.arc(n.sx, n.sy, r + 4, 0, TAU);
+            ctx.strokeStyle = n.color;
+            ctx.globalAlpha = 0.5;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+          }
+
+          if ((i === hovered && !dimmed) || n.isFlo) {
+            ctx.beginPath();
+            ctx.arc(n.sx, n.sy, r + 5, 0, TAU);
+            ctx.strokeStyle = "#0f172a";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          }
+        }
+
+        // labels
+        ctx.font = "11px Helvetica Neue, sans-serif";
+        ctx.textAlign = "center";
+        for (const n of nodes) {
+          const isMajor = n.isFlo || n.commits >= 600 || n.active;
+          if (n !== nodes[hovered] && !n.isFlo && !(isMajor && n.depth > 0.15)) continue;
+          if (isDimmed(n)) continue;
+          const facing = n.isFlo ? 1 : frontness(n.depth);
+          const alpha = n.isFlo ? 1 : Math.min(1, facing * 1.4) * (n.end === "now" ? 1 : 0.6);
+          if (alpha < 0.25) continue;
+          ctx.fillStyle = n.isFlo ? "#0f172a" : `rgba(30,41,59,${alpha})`;
+          ctx.font = n.isFlo ? "bold 12px Helvetica Neue, sans-serif" : "11px Helvetica Neue, sans-serif";
+          ctx.fillText(n.name, n.sx, n.sy - n.px - 8);
+        }
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+
+      /* ---- interactions ---- */
+      function canvasPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return [e.clientX - rect.left, e.clientY - rect.top];
       }
 
-      // Call the function for each chart initially and on window resize
-      configureChartTooltips(educationChart);
-      configureChartTooltips(experienceChart);
+      function hitTest(x, y) {
+        let best = -1, bestD = 1e9;
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+          if (isDimmed(n)) continue;
+          const d = Math.hypot(n.sx - x, n.sy - y);
+          const thr = Math.max(10, n.px + 6);
+          if (d < thr && d < bestD) { best = i; bestD = d; }
+        }
+        return best;
+      }
 
-      window.addEventListener("resize", function () {
-        configureChartTooltips(educationChart);
-        configureChartTooltips(experienceChart);
+      canvas.addEventListener("pointerdown", (e) => {
+        if (e.pointerType !== "mouse" && !e.isPrimary) return;
+        dragging = true;
+        camAnim = null;
+        canvas.classList.add("dragging");
+        canvas.setPointerCapture(e.pointerId);
+        [lastX, lastY] = canvasPos(e);
+        downX = lastX; downY = lastY; downT = performance.now();
+        vyaw = vpitch = 0;
+        lastInteract = performance.now();
+      });
+
+      canvas.addEventListener("pointermove", (e) => {
+        if (dragging && e.pointerType !== "mouse" && !e.isPrimary) return;
+        const [x, y] = canvasPos(e);
+        if (dragging) {
+          const dx = x - lastX, dy = y - lastY;
+          vyaw = -dx * 0.005;
+          vpitch = -dy * 0.004;
+          yaw += vyaw;
+          pitch = Math.max(-1.45, Math.min(1.45, pitch + vpitch));
+          lastX = x; lastY = y;
+          lastInteract = performance.now();
+          hovered = -1;
+        } else {
+          const h = hitTest(x, y);
+          if (h !== hovered) {
+            hovered = h;
+            canvas.style.cursor = h >= 0 ? "pointer" : "grab";
+          }
+        }
+      });
+
+      function endDrag(e) {
+        if (!dragging || (e.pointerType !== "mouse" && !e.isPrimary)) return;
+        dragging = false;
+        canvas.classList.remove("dragging");
+        lastInteract = performance.now();
+        const [x, y] = canvasPos(e);
+        const moved = Math.hypot(x - downX, y - downY);
+        const dt = performance.now() - downT;
+        if (moved < 8 && dt < 500) {
+          const h = hitTest(x, y);
+          if (h >= 0) {
+            if (nodes[h].isFlo) openProfile();
+            else openPopup(nodes[h]);
+          } else {
+            clearFilter();
+            targetZoom = ZOOM0; // remise du zoom standard
+          }
+        }
+      }
+      canvas.addEventListener("pointerup", endDrag);
+      canvas.addEventListener("pointercancel", endDrag);
+
+      canvas.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        targetZoom = Math.max(0.55, Math.min(1.9, targetZoom * (e.deltaY > 0 ? 0.92 : 1.09)));
+        lastInteract = performance.now();
+      }, { passive: false });
+
+      let pinchDist = 0;
+      canvas.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 2) {
+          e.preventDefault();
+          const d = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          if (pinchDist > 0) {
+            targetZoom = Math.max(0.55, Math.min(1.9, targetZoom * (pinchDist / d)));
+          }
+          pinchDist = d;
+        }
+      }, { passive: false });
+      canvas.addEventListener("touchend", () => (pinchDist = 0));
+
+      /* ---- filtre ---- */
+      function syncLegend() {
+        document.querySelectorAll(".legend-item").forEach((el) => {
+          el.classList.toggle(
+            "active",
+            !!activeFilter && el.dataset.fkind === activeFilter.kind && el.dataset.fkey === activeFilter.key
+          );
+        });
+      }
+      function toggleFilter(kind, key) {
+        const same = activeFilter && activeFilter.kind === kind && activeFilter.key === key;
+        activeFilter = same ? null : { kind, key };
+        syncLegend();
+        if (activeFilter) {
+          focusFilter();
+        } else {
+          camAnim = null;
+          lastInteract = performance.now() - 6000; // la rotation reprend
+        }
+      }
+      function clearFilter() {
+        if (!activeFilter) return;
+        activeFilter = null;
+        syncLegend();
+        camAnim = null;
+        lastInteract = performance.now() - 6000;
+      }
+
+      /* ---- caméra : recentrer sur le filtre ---- */
+      function focusFilter() {
+        if (!activeFilter) return;
+        let sx = 0, sy = 0, sz = 0, count = 0;
+        const vis = [];
+        for (const n of nodes) {
+          if (!isDimmed(n) && !n.isFlo) {
+            sx += n.pos[0]; sy += n.pos[1]; sz += n.pos[2];
+            vis.push(n);
+            count++;
+          }
+        }
+        if (!count) return;
+        const l = Math.hypot(sx, sy, sz) || 1;
+        sx /= l; sy /= l; sz /= l;
+        let ty = Math.atan2(-sx, sz);
+        while (ty - yaw > Math.PI) ty -= TAU;
+        while (ty - yaw < -Math.PI) ty += TAU;
+        const tp = Math.max(-1.45, Math.min(1.45, Math.atan2(sy, Math.hypot(sx, sz))));
+        camAnim = { ty, tp };
+        vyaw = vpitch = 0;
+
+        // zoom pour que TOUS les points filtrés tiennent à l'écran
+        const cy = Math.cos(ty), syw = Math.sin(ty);
+        const cp = Math.cos(tp), sp = Math.sin(tp);
+        let maxE = 0;
+        for (const n of vis) {
+          const x1 = n.pos[0] * cy + n.pos[2] * syw;
+          const z1 = -n.pos[0] * syw + n.pos[2] * cy;
+          const y1 = n.pos[1];
+          const vx = x1, vy = y1 * cp - z1 * sp, vz = y1 * sp + z1 * cp;
+          const sc = CAM / (CAM - vz);
+          maxE = Math.max(maxE, Math.hypot(vx * sc, vy * sc));
+        }
+        if (maxE > 0) {
+          targetZoom = Math.max(0.55, Math.min(1.9, 0.44 / (0.38 * maxE)));
+        }
+      }
+
+      /* ---- panneau ---- */
+      const infoBtn = document.getElementById("infoBtn");
+      const infoPanel = document.getElementById("infoPanel");
+      function togglePanel(force) {
+        const open = force !== undefined ? force : !infoPanel.classList.contains("open");
+        infoPanel.classList.toggle("open", open);
+      }
+      infoBtn.addEventListener("click", () => togglePanel());
+
+      document.getElementById("resetBtn").addEventListener("click", () => {
+        yaw = YAW0; pitch = PITCH0; targetZoom = ZOOM0; zoom = ZOOM0;
+        vyaw = vpitch = 0;
+        camAnim = null;
+        lastInteract = performance.now();
+      });
+
+      const spinBtn = document.getElementById("spinBtn");
+      spinBtn.addEventListener("click", () => {
+        autoSpin = !autoSpin;
+        spinBtn.innerHTML = autoSpin
+          ? '<i class="ti ti-player-pause"></i> Rotation auto : ON'
+          : '<i class="ti ti-player-play"></i> Rotation auto : OFF';
+      });
+
+      /* ---- légende ---- */
+      const legendDom = document.getElementById("legendDomains");
+      for (const [key, d] of Object.entries(DOMAINS)) {
+        const btn = document.createElement("button");
+        btn.className = "legend-item";
+        btn.dataset.fkind = "domain";
+        btn.dataset.fkey = key;
+        btn.innerHTML = `<span class="legend-dot" style="background:${d.color}"></span>${d.label}`;
+        btn.addEventListener("click", () => toggleFilter("domain", key));
+        legendDom.appendChild(btn);
+      }
+      const legendTech = document.getElementById("legendTechs");
+      // tri par fréquence d'utilisation dans les projets
+      const techCount = {};
+      PROJECTS.forEach((p) => p.techs.forEach((t) => (techCount[t] = (techCount[t] || 0) + 1)));
+      Object.keys(techCount)
+        .sort((a, b) => techCount[b] - techCount[a])
+        .forEach((key) => {
+          const t = TECHS[key];
+          if (!t) return;
+          const btn = document.createElement("button");
+          btn.className = "legend-item";
+          btn.dataset.fkind = "tech";
+          btn.dataset.fkey = key;
+          btn.innerHTML = `<span class="legend-dot" style="background:${t.color}"></span>${t.label}`;
+          btn.addEventListener("click", () => toggleFilter("tech", key));
+          legendTech.appendChild(btn);
+        });
+
+      /* ---- accordéon du panneau ---- */
+      document.querySelectorAll("#infoPanel .acc-head").forEach((head) => {
+        head.addEventListener("click", () => {
+          const acc = head.parentElement;
+          const wasOpen = acc.classList.contains("open");
+          document.querySelectorAll("#infoPanel .acc").forEach((a) => a.classList.remove("open"));
+          if (!wasOpen) acc.classList.add("open");
+        });
+      });
+
+      /* ---- popups ---- */
+      function durStr(start, end) {
+        const m = months(parseDate(start), parseDate(end));
+        const y = Math.floor(m / 12), mo = m % 12;
+        const parts = [];
+        if (y) parts.push(y + " an" + (y > 1 ? "s" : ""));
+        if (mo) parts.push(mo + " mois");
+        return parts.length ? parts.join(" ") : "< 1 mois";
+      }
+
+      function openPopup(n) {
+        const modal = document.getElementById("popupModal");
+        const d = DOMAINS[n.domain];
+        const period =
+          fmtDate(n.start) + " → " + (n.end === "now" ? "aujourd'hui" : fmtDate(n.end));
+        const techChips = (n.techs || [])
+          .filter((t) => TECHS[t])
+          .map((t) => {
+            const tech = TECHS[t];
+            return `<button class="sector-chip" style="padding:2px 10px 2px 7px;font-size:0.8em;" onclick="toggleFilter('tech','${t}');closeModal()"><span class="dot" style="background:${tech.color};width:8px;height:8px;"></span>${tech.label}</button>`;
+          })
+          .join(" ");
+        document.getElementById("popupContent").innerHTML = `
+          <div class="modal-label">${n.name}</div>
+          ${n.active ? '<div class="active-badge"><span class="pulse-dot"></span>en cours</div>' : ""}
+          ${n.commits ? `<div class="modal-sub">${n.commits} commits</div>` : ""}
+          <div class="meta-line">
+            <span class="lbl">Secteur</span>
+            <button class="sector-chip" onclick="toggleFilter('domain','${n.domain}');closeModal()">
+              <span class="dot" style="background:${d.color}"></span>${d.label}
+            </button>
+          </div>
+          ${techChips ? `<div class="meta-line"><span class="lbl">Technos</span><span style="display:flex;flex-wrap:wrap;gap:6px;">${techChips}</span></div>` : ""}
+          <div class="meta-line"><span class="lbl">Période</span><span>${period}<span class="dur-pre"> — </span><span class="dur">${durStr(n.start, n.end)}</span></span></div>
+          ${n.commits ? `<div class="meta-line"><span class="lbl">Commits</span><span>${n.commits}</span></div>` : ""}
+          <div class="modal-comment">${n.desc}</div>
+          <div class="modal-footer">
+            ${n.url ? `<a href="${n.url}" target="_blank">${/github|gitlab|duniter/.test(n.url) ? "Voir le projet" : "Visiter le site"} →</a>` : ""}
+          </div>
+        `;
+        modal.style.display = "flex";
+      }
+
+      function openProfile() {
+        const modal = document.getElementById("popupModal");
+        const totalCommits = PROJECTS.reduce((s, p) => s + (p.commits || 0), 0);
+        const minStart = Math.min(...PROJECTS.map((p) => parseDate(p.start)));
+        const years = Math.floor((NOW - minStart) / 31557600000);
+        const birth = new Date(PROFILE.birth);
+        const nowD = new Date();
+        let age = nowD.getFullYear() - birth.getFullYear();
+        if (
+          nowD.getMonth() < birth.getMonth() ||
+          (nowD.getMonth() === birth.getMonth() && nowD.getDate() < birth.getDate())
+        ) {
+          age--;
+        }
+        document.getElementById("popupContent").innerHTML = `
+          <div class="modal-label">${PROFILE.name} <span style="font-size:0.55em;font-weight:normal;color:#64748b;">${age} ans</span></div>
+          <div class="modal-sub">${PROFILE.role}</div>
+          <div class="modal-sub" style="margin-top:-8px;display:flex;align-items:center;gap:6px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(PROFILE.location + ", France")}" target="_blank" style="color:#64748b;">${PROFILE.location}</a>
+            <span class="map-toggle" onclick="toggleMap()" title="Afficher la carte"><i class="ti ti-chevron-down" id="mapChev"></i></span>
+          </div>
+          <div id="mapWrap" style="display:none;">
+            <iframe src="https://maps.google.com/maps?q=${encodeURIComponent(PROFILE.location + ", France")}&z=11&output=embed" style="width:100%;height:170px;border:0;border-radius:8px;margin:4px 0 10px;" loading="lazy" title="Localisation"></iframe>
+          </div>
+          <div class="meta-line"><span class="lbl">Contact</span><span><a href="mailto:${PROFILE.email}" style="color:#007bff;font-weight:bold;">${PROFILE.email}</a></span></div>
+          <div class="meta-line"><span class="lbl">GIT</span><span>${PROFILE.links.map(([l, u]) => `<a href="${u}" target="_blank" style="color:#007bff;font-weight:bold;">${l}</a>`).join(" · ")}</span></div>
+          <div class="modal-section"><h4>Parcours</h4><p>${PROJECTS.length} projets & expériences — ${totalCommits.toLocaleString("fr-FR")} commits — ${years} ans de code</p></div>
+          <div class="modal-section"><h4>Formation</h4>${PROFILE.formation.map(([a, b]) => `<p style="margin-bottom:8px;">• <b>${a}</b><br><span style="color:#64748b;">${b}</span></p>`).join("")}</div>
+          <div class="modal-section"><h4>Langues</h4><p>${PROFILE.languages}</p></div>
+          <div class="modal-section"><h4>Passions</h4><p>${PROFILE.passions}</p></div>
+        `;
+        modal.style.display = "flex";
+      }
+
+      function toggleMap() {
+        const w = document.getElementById("mapWrap");
+        if (!w) return;
+        const open = w.style.display === "none";
+        w.style.display = open ? "block" : "none";
+        const chev = document.getElementById("mapChev");
+        if (chev) chev.className = open ? "ti ti-chevron-up" : "ti ti-chevron-down";
+      }
+
+      function closeModal() {
+        document.getElementById("popupModal").style.display = "none";
+      }
+      document.getElementById("popupModal").addEventListener("click", (e) => {
+        if (e.target.id === "popupModal") closeModal();
+      });
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeModal();
+          togglePanel(false);
+        }
       });
     </script>
   </body>
