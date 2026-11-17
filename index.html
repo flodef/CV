@@ -892,10 +892,14 @@
         ctx.textAlign = "center";
         for (const n of nodes) {
           const isMajor = n.isFlo || n.commits >= 600 || n.active;
-          if (n !== nodes[hovered] && !n.isFlo && !(isMajor && n.depth > 0.15)) continue;
+          const isFiltered = activeFilter && !isDimmed(n);
+          if (!isFiltered && n !== nodes[hovered] && !n.isFlo && !(isMajor && n.depth > 0.15)) continue;
           if (isDimmed(n)) continue;
           const facing = n.isFlo ? 1 : frontness(n.depth);
-          const alpha = n.isFlo ? 1 : Math.min(1, facing * 1.4) * (n.end === "now" ? 1 : 0.6);
+          const alpha = n.isFlo
+            ? 1
+            : (isFiltered ? Math.max(0.6, Math.min(1, facing * 1.6)) : Math.min(1, facing * 1.4)) *
+              (n.end === "now" ? 1 : 0.6);
           if (alpha < 0.25) continue;
           ctx.fillStyle = n.isFlo ? "#0f172a" : `rgba(30,41,59,${alpha})`;
           ctx.font = n.isFlo ? "bold 12px Helvetica Neue, sans-serif" : "11px Helvetica Neue, sans-serif";
