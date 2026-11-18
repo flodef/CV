@@ -497,81 +497,210 @@
       }
 
       /* ---------- version papier / PDF ---------- */
-      #printSheet {
+      #psheetOverlay {
         display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 70;
+        background: rgba(15, 23, 42, 0.6);
+        overflow: auto;
+        padding: 18px 12px 40px;
+      }
+
+      #psheetOverlay.open {
+        display: block;
+      }
+
+      .psheet-bar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 4px 0 14px;
+      }
+
+      .psheet-bar button {
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        border: 0;
+        border-radius: 8px;
+        padding: 9px 18px;
+        cursor: pointer;
+      }
+
+      #psheetPrintBtn {
+        background: #007bff;
+        color: #fff;
+      }
+
+      #psheetCloseBtn {
+        background: #fff;
+        color: #1f2937;
+      }
+
+      .psheet-page {
+        max-width: 780px;
+        margin: 0 auto 30px;
+        background: #fff;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        padding: 12mm 13mm;
+        box-sizing: border-box;
+      }
+
+      #printSheet {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        color: #111;
-        font-size: 9.5pt;
-        line-height: 1.4;
+        color: #1f2937;
+        font-size: 9.3pt;
+        line-height: 1.33;
       }
 
-      #printSheet h1 {
-        font-size: 17pt;
-        margin: 0 0 2px;
+      #printSheet .cv-name {
+        font-size: 21pt;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        color: #0f172a;
+        margin: 0;
+      }
+
+      #printSheet .cv-role {
+        font-size: 11pt;
+        font-weight: 600;
         color: #007bff;
+        margin: 2px 0 3px;
       }
 
-      #printSheet .psub {
-        font-size: 10pt;
-        color: #444;
-        margin-bottom: 2px;
+      #printSheet .cv-contact {
+        font-size: 8.6pt;
+        color: #475569;
+        margin-bottom: 4px;
       }
 
-      #printSheet .pcontact {
-        font-size: 8.5pt;
-        color: #555;
-        margin-bottom: 10px;
+      #printSheet .cv-cols {
+        display: flex;
+        gap: 24px;
+      }
+
+      #printSheet .cv-main {
+        flex: 1.65;
+        min-width: 0;
+      }
+
+      #printSheet .cv-side {
+        flex: 1;
+        min-width: 0;
       }
 
       #printSheet h2 {
-        font-size: 10pt;
+        font-size: 9pt;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: #007bff;
-        border-bottom: 1px solid #ccc;
-        margin: 10px 0 5px;
+        letter-spacing: 0.09em;
+        color: #0f172a;
+        border-bottom: 2px solid #007bff;
+        margin: 9px 0 4px;
         padding-bottom: 2px;
       }
 
-      #printSheet .pexp {
+      #printSheet .cv-side h2:first-child {
+        margin-top: 2px;
+      }
+
+      #printSheet p {
+        margin: 0 0 4px;
+        font-size: 9.2pt;
+        text-align: justify;
+      }
+
+      #printSheet .cv-exp {
         margin-bottom: 5px;
-      }
-
-      #printSheet .pexp .pper {
-        color: #666;
-        font-size: 8.5pt;
-      }
-
-      #printSheet .pexp p {
-        margin: 1px 0 0;
-        font-size: 8.5pt;
-        color: #333;
-      }
-
-      #printSheet .pcols {
-        column-count: 2;
-        column-gap: 18px;
-      }
-
-      #printSheet .pi {
-        font-size: 8.5pt;
-        margin-bottom: 3px;
         break-inside: avoid;
       }
 
-      #printSheet .pi .pmeta {
-        color: #555;
+      #printSheet .cv-exp-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
       }
 
-      #printSheet .pfoot {
-        margin-top: 10px;
+      #printSheet .cv-exp-top b {
+        font-size: 9.6pt;
+      }
+
+      #printSheet .cv-dates {
+        font-size: 8pt;
+        color: #64748b;
+        white-space: nowrap;
+      }
+
+      #printSheet .cv-exp p,
+      #printSheet .cv-proj .cv-meta {
+        font-size: 8.6pt;
+        color: #334155;
+        margin-top: 1px;
+      }
+
+      #printSheet .cv-proj {
         font-size: 8.5pt;
-        color: #555;
+        margin-bottom: 4px;
+        break-inside: avoid;
+      }
+
+      #printSheet .cv-proj b {
+        font-size: 8.8pt;
+      }
+
+      #printSheet .cv-proj .cv-meta {
+        display: block;
+        color: #64748b;
+        font-size: 7.9pt;
+      }
+
+      #printSheet .cv-projs {
+        column-count: 3;
+        column-gap: 18px;
+      }
+
+      #printSheet .cv-act {
+        color: #16a34a;
+        font-size: 7pt;
+        margin-right: 3px;
+      }
+
+      #printSheet .cv-skill {
+        font-size: 8.8pt;
+        margin-bottom: 4px;
+      }
+
+      #printSheet .cv-skill b {
+        color: #0f172a;
+      }
+
+      #printSheet .cv-form {
+        font-size: 8.8pt;
+        margin-bottom: 5px;
+        break-inside: avoid;
+      }
+
+      #printSheet .cv-form span {
+        color: #64748b;
+      }
+
+      #printSheet .cv-foot {
+        margin-top: 9px;
+        padding-top: 5px;
+        border-top: 1px solid #e2e8f0;
+        font-size: 8pt;
+        color: #94a3b8;
+        text-align: center;
       }
 
       @page {
         size: A4 portrait;
-        margin: 11mm;
+        margin: 12mm;
       }
 
       @media print {
@@ -583,8 +712,22 @@
         #themeBtn,
         #printBtn,
         #infoPanel,
-        .modal {
+        .modal,
+        .psheet-bar {
           display: none !important;
+        }
+        #psheetOverlay {
+          display: block !important;
+          position: static;
+          background: #fff;
+          overflow: visible;
+          padding: 0;
+        }
+        .psheet-page {
+          max-width: none;
+          margin: 0;
+          box-shadow: none;
+          padding: 0;
         }
         #printSheet {
           display: block !important;
@@ -631,7 +774,13 @@
       </div>
     </div>
 
-    <div id="printSheet"></div>
+    <div id="psheetOverlay">
+      <div class="psheet-bar">
+        <button id="psheetPrintBtn"><i class="ti ti-printer"></i> Imprimer / Enregistrer en PDF</button>
+        <button id="psheetCloseBtn"><i class="ti ti-x"></i> Fermer</button>
+      </div>
+      <div class="psheet-page"><div id="printSheet"></div></div>
+    </div>
 
     <div class="modal" id="popupModal">
       <div class="modal-content">
@@ -1391,51 +1540,113 @@
       function buildPrintSheet() {
         const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
         const fd = (s) => (s === "now" ? "aujourd'hui" : fmtDate(s));
-        const period = (p) => `${fd(p.start)} → ${p.end === "now" ? "aujourd'hui" : fd(p.end)} (${durStr(p.start, p.end)})`;
-        const pro = PROJECTS.filter((p) => p.domain === "pro");
+        const period = (p) => `${fd(p.start)} → ${fd(p.end)}`;
+        const yrs = (p) =>
+          p.start.slice(0, 4) + " → " + (p.end === "now" ? "aujourd'hui" : p.end.slice(0, 4));
+        const dur = (p) => durStr(p.start, p.end);
+        const pro = PROJECTS.filter((p) => p.domain === "pro").sort(
+          (a, b) => parseDate(b.start) - parseDate(a.start)
+        );
         const repos = PROJECTS.filter((p) => p.domain !== "pro").sort(
           (a, b) => parseDate(b.start) - parseDate(a.start)
         );
         const techNames = (p) =>
-          (p.techs || []).map((t) => TECHS[t] && TECHS[t].label).filter(Boolean).join(", ");
+          (p.techs || []).map((t) => TECHS[t] && TECHS[t].label).filter(Boolean);
         const age = Math.floor((NOW - Date.parse(PROFILE.birth)) / 31557600000);
+        const totalCommits = PROJECTS.reduce((s, p) => s + (p.commits || 0), 0);
+        const oldest = Math.min(...PROJECTS.map((p) => parseDate(p.start)));
+        const yearsCode = Math.floor((NOW - oldest) / 31557600000);
+        const fmtN = (n) => n.toLocaleString("fr-FR");
+
+        const SKILL_GROUPS = [
+          ["Frontend", ["ts", "react", "js", "html"]],
+          ["Backend & données", ["sql", "php", "python"]],
+          ["Blockchain & Web3", ["web3", "rust"]],
+          ["Systèmes & infra", ["cpp", "csharp", "ansible"]],
+        ];
+        const skills = SKILL_GROUPS.map(
+          ([g, keys]) =>
+            `<div class="cv-skill"><b>${g}</b> — ${keys
+              .map((k) => TECHS[k] && TECHS[k].label)
+              .filter(Boolean)
+              .join(" · ")}</div>`
+        ).join("");
+
+        const expHtml = pro
+          .map(
+            (p) => `<div class="cv-exp">
+              <div class="cv-exp-top"><b>${esc(p.name)}</b><span class="cv-dates">${period(p)} · ${dur(p)}</span></div>
+              <p>${esc(p.desc)}</p>
+            </div>`
+          )
+          .join("");
+
+        const projHtml = repos
+          .map((p) => {
+            const meta = [
+              techNames(p).join(" · "),
+              p.commits ? `${fmtN(p.commits)} commits` : "",
+            ]
+              .filter(Boolean)
+              .join(" · ");
+            return `<div class="cv-proj">
+              <div class="cv-exp-top"><b>${p.active ? '<span class="cv-act">●</span>' : ""}${esc(p.name)}</b><span class="cv-dates">${yrs(p)}</span></div>
+              ${meta ? `<span class="cv-meta">${esc(meta)}</span>` : ""}
+            </div>`;
+          })
+          .join("");
+
         document.getElementById("printSheet").innerHTML = `
-          <h1>${esc(PROFILE.name)}</h1>
-          <div class="psub">${esc(PROFILE.role)} — ${age} ans</div>
-          <div class="pcontact">${esc(PROFILE.location)} · ${esc(PROFILE.email)} · ${PROFILE.links
-            .map(([l, u]) => `<a href="${u}" style="color:#007bff;">${esc(l)}</a>`)
+          <h1 class="cv-name">${esc(PROFILE.name)}</h1>
+          <div class="cv-role">${esc(PROFILE.role)}</div>
+          <div class="cv-contact">${age} ans · ${esc(PROFILE.location)} · ${esc(PROFILE.email)} · ${PROFILE.links
+            .map(([l, u]) => `<a href="${u}" style="color:#007bff;text-decoration:none;">${esc(l)}</a>`)
             .join(" · ")}</div>
 
-          <h2>Expériences professionnelles</h2>
-          ${pro
-            .map(
-              (p) => `<div class="pexp"><b>${esc(p.name)}</b> <span class="pper">${period(p)}</span><p>${esc(p.desc)}</p></div>`
-            )
-            .join("")}
+          <div class="cv-cols">
+            <div class="cv-main">
+              <h2>Profil</h2>
+              <p>Développeur full-stack — applications web, gestion financière et blockchain. ${yearsCode} ans d'expérience, de l'intranet pharmaceutique (2004) aux plateformes décentralisées sur Solana. Fondateur de FiMs ; ${repos.length + pro.length} projets & expériences, ${fmtN(totalCommits)} commits publics.</p>
 
-          <h2>Projets — ${repos.length}</h2>
-          <div class="pcols">
-            ${repos
-              .map((p) => {
-                const bits = [period(p)];
-                const tn = techNames(p);
-                if (tn) bits.push(esc(tn));
-                if (p.commits) bits.push(`${p.commits} commits`);
-                if (p.active) bits.push("en cours");
-                return `<div class="pi"><b>${esc(p.name)}</b> <span class="pmeta">— ${bits.join(" · ")}</span></div>`;
-              })
-              .join("")}
+              <h2>Expérience professionnelle</h2>
+              ${expHtml}
+            </div>
+
+            <div class="cv-side">
+              <h2>Compétences</h2>
+              ${skills}
+
+              <h2>Formation</h2>
+              ${PROFILE.formation
+                .map(([a, b]) => `<div class="cv-form"><b>${esc(a)}</b><br><span>${esc(b)}</span></div>`)
+                .join("")}
+
+              <h2>Langues</h2>
+              <p>${esc(PROFILE.languages)}</p>
+
+              <h2>Centres d'intérêt</h2>
+              <p>${esc(PROFILE.passions)}</p>
+            </div>
           </div>
 
-          <h2>Formation</h2>
-          ${PROFILE.formation.map(([a, b]) => `<div class="pi"><b>${esc(a)}</b> <span class="pmeta">— ${esc(b)}</span></div>`).join("")}
+          <h2>Projets — ${repos.length}</h2>
+          <div class="cv-projs">${projHtml}</div>
 
-          <div class="pfoot"><b>Langues :</b> ${esc(PROFILE.languages)}<br><b>Passions :</b> ${esc(PROFILE.passions)}</div>
+          <div class="cv-foot">${esc(PROFILE.name)} — <a href="https://cv.fims.fi" style="color:#94a3b8;">cv.fims.fi</a></div>
         `;
       }
+      buildPrintSheet();
+
+      const psheetOverlay = document.getElementById("psheetOverlay");
       document.getElementById("printBtn").addEventListener("click", () => {
-        buildPrintSheet();
-        window.print();
+        psheetOverlay.classList.add("open");
+      });
+      document.getElementById("psheetPrintBtn").addEventListener("click", () => window.print());
+      document.getElementById("psheetCloseBtn").addEventListener("click", () =>
+        psheetOverlay.classList.remove("open")
+      );
+      psheetOverlay.addEventListener("click", (e) => {
+        if (e.target === psheetOverlay) psheetOverlay.classList.remove("open");
       });
 
       /* ---- légende ---- */
@@ -1572,6 +1783,7 @@
         if (e.key === "Escape") {
           closeModal();
           togglePanel(false);
+          psheetOverlay.classList.remove("open");
         }
       });
     </script>
