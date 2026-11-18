@@ -542,13 +542,33 @@
       }
 
       .psheet-bar {
-        position: sticky;
-        top: 0;
+        position: absolute;
+        top: 12px;
+        left: 0;
+        right: 0;
         z-index: 2;
         display: flex;
         justify-content: center;
-        gap: 8px;
-        padding: 4px 0 14px;
+        padding: 0;
+        pointer-events: none;
+      }
+
+      .psheet-bar button {
+        pointer-events: auto;
+      }
+
+      #psheetCloseBtn {
+        position: absolute;
+        top: 0;
+        right: 12px;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
       }
 
       .psheet-bar button {
@@ -594,17 +614,6 @@
         #printSheet .cv-layout {
           flex: 1 0 auto;
         }
-        .psheet-bar {
-          position: fixed;
-          top: 14px;
-          right: 16px;
-          left: auto;
-          justify-content: flex-end;
-          padding: 0;
-        }
-        .psheet-bar button {
-          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-        }
       }
 
       #printSheet {
@@ -625,9 +634,19 @@
         width: 66mm;
         background: #f3f5f8;
         padding: 12mm 9mm 16mm 13mm;
-        margin: -12mm 0 -12mm 0;
+        margin: -12mm 0 -12mm -13mm;
         box-sizing: border-box;
         position: relative;
+        isolation: isolate;
+      }
+
+      #printSheet .cv-side-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        display: block;
       }
 
       /* bandeau navy en haut (saigne au bord haut de page) */
@@ -641,6 +660,16 @@
         padding: 2.5mm 8mm 0;
         box-sizing: border-box;
         text-align: center;
+        isolation: isolate;
+      }
+
+      #printSheet .cv-fill {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        display: block;
       }
 
       #printSheet .cv-band-top .cv-name2 {
@@ -680,9 +709,10 @@
         bottom: 0;
         height: 14mm;
         background: #0f3669;
+        isolation: isolate;
       }
 
-      #printSheet .cv-band-bot svg {
+      #printSheet .cv-band-bot > svg:not(.cv-fill) {
         position: absolute;
         top: -8mm;
         left: 0;
@@ -693,10 +723,10 @@
 
       #printSheet .cv-photo {
         display: block;
-        width: 27mm;
-        height: 27mm;
+        width: 32mm;
+        height: 32mm;
         object-fit: cover;
-        margin: 4mm auto 5mm;
+        margin: 5mm auto 5mm;
         border-radius: 50%;
         border: 1.6mm solid #fff;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
@@ -787,14 +817,18 @@
       }
 
       #printSheet .cv-dot {
-        width: 1.5mm;
-        height: 1.5mm;
-        border-radius: 50%;
-        background: #0f3669;
+        font-style: normal;
+        font-size: 1.9mm;
+        line-height: 1;
+        color: #0f3669;
+      }
+
+      #printSheet .cv-dot::before {
+        content: "\25CF";
       }
 
       #printSheet .cv-dot.off {
-        background: #c2c4c6;
+        color: #c2c4c6;
       }
 
       /* ---------- colonne principale ---------- */
@@ -942,7 +976,7 @@
           padding: 9mm 10mm 9mm 9mm;
         }
         #printSheet .cv-photo {
-          margin-top: 7mm;
+          margin-top: 8mm;
         }
         #printSheet .cv-layout {
           flex: 1 0 auto;
@@ -997,7 +1031,7 @@
     <div id="psheetOverlay">
       <div class="psheet-bar">
         <button id="psheetPrintBtn"><i class="ti ti-printer"></i> Imprimer / Enregistrer en PDF</button>
-        <button id="psheetCloseBtn"><i class="ti ti-x"></i> Fermer</button>
+        <button id="psheetCloseBtn" title="Fermer"><i class="ti ti-x"></i></button>
       </div>
       <div class="psheet-page"><div id="printSheet"></div></div>
     </div>
@@ -1871,7 +1905,9 @@
         document.getElementById("printSheet").innerHTML = `
           <div class="cv-layout">
             <div class="cv-side">
+              <svg class="cv-side-bg" viewBox="0 0 200 297" preserveAspectRatio="none" aria-hidden="true"><rect width="200" height="297" fill="#f3f5f8"/></svg>
               <div class="cv-band-top">
+                <svg class="cv-fill" viewBox="0 0 200 19" preserveAspectRatio="none" aria-hidden="true"><rect width="200" height="19" fill="#0f3669"/></svg>
                 <h1 class="cv-name2">${esc(PROFILE.name)}</h1>
                 <div class="cv-role2">${esc(PROFILE.role)} · ${age} ans</div>
               </div>
@@ -1892,6 +1928,7 @@
               ${PROFILE.passions.split("·").map((p) => `<div class="cv-int">${esc(p.trim())}</div>`).join("")}
 
               <div class="cv-band-bot">
+                <svg class="cv-fill" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><rect width="200" height="14" fill="#0f3669"/></svg>
                 <svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M0,16 L200,16 L200,2 C150,15 50,15 0,2 Z" fill="#0f3669"/></svg>
               </div>
             </div>
