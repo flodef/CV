@@ -348,6 +348,14 @@
         transition: transform 0.2s ease;
       }
 
+      .acc-hint {
+        font-weight: normal;
+        font-size: 0.85em;
+        margin-left: 3px;
+        cursor: help;
+        vertical-align: -1px;
+      }
+
       .acc.open .acc-head .ti {
         transform: rotate(180deg);
       }
@@ -429,11 +437,11 @@
       <h3>Toile de projets</h3>
 
       <div class="acc open">
-        <button class="acc-head"><span>Domaines — cliquer pour filtrer</span><i class="ti ti-chevron-down"></i></button>
+        <button class="acc-head"><span>Domaines <i class="ti ti-info-circle acc-hint" title="Cliquer pour filtrer"></i></span><i class="ti ti-chevron-down"></i></button>
         <div class="acc-body" id="legendDomains"></div>
       </div>
       <div class="acc">
-        <button class="acc-head"><span>Technos — cliquer pour filtrer</span><i class="ti ti-chevron-down"></i></button>
+        <button class="acc-head"><span>Technos <i class="ti ti-info-circle acc-hint" title="Cliquer pour filtrer"></i></span><i class="ti ti-chevron-down"></i></button>
         <div class="acc-body" id="legendTechs"></div>
       </div>
       <div class="acc">
@@ -741,7 +749,7 @@
       function project(p) {
         const r = rotatePoint(p);
         const s = CAM / (CAM - r[2]);
-        const Rpx = Math.min(W, H) * 0.38 * zoom;
+        const Rpx = Math.min(W, H) * 0.5 * zoom;
         return {
           x: W / 2 + r[0] * s * Rpx,
           y: H / 2 - r[1] * s * Rpx,
@@ -1063,7 +1071,7 @@
           maxE = Math.max(maxE, Math.hypot(vx * sc, vy * sc));
         }
         if (maxE > 0) {
-          targetZoom = Math.max(0.55, Math.min(1.9, 0.44 / (0.38 * maxE)));
+          targetZoom = Math.max(0.55, Math.min(1.9, 0.44 / (0.5 * maxE)));
         }
       }
 
