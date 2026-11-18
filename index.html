@@ -554,11 +554,11 @@
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         color: #1f2937;
         font-size: 9.3pt;
-        line-height: 1.33;
+        line-height: 1.31;
       }
 
       #printSheet .cv-name {
-        font-size: 21pt;
+        font-size: 20pt;
         font-weight: 800;
         letter-spacing: 0.02em;
         color: #0f172a;
@@ -575,7 +575,7 @@
       #printSheet .cv-contact {
         font-size: 8.6pt;
         color: #475569;
-        margin-bottom: 4px;
+        margin-bottom: 3px;
       }
 
       #printSheet .cv-cols {
@@ -600,7 +600,7 @@
         letter-spacing: 0.09em;
         color: #0f172a;
         border-bottom: 2px solid #007bff;
-        margin: 9px 0 4px;
+        margin: 8px 0 4px;
         padding-bottom: 2px;
       }
 
@@ -609,13 +609,13 @@
       }
 
       #printSheet p {
-        margin: 0 0 4px;
+        margin: 0 0 3px;
         font-size: 9.2pt;
         text-align: justify;
       }
 
       #printSheet .cv-exp {
-        margin-bottom: 5px;
+        margin-bottom: 4px;
         break-inside: avoid;
       }
 
@@ -638,14 +638,14 @@
 
       #printSheet .cv-exp p,
       #printSheet .cv-proj .cv-meta {
-        font-size: 8.6pt;
+        font-size: 8.5pt;
         color: #334155;
         margin-top: 1px;
       }
 
       #printSheet .cv-proj {
-        font-size: 8.5pt;
-        margin-bottom: 4px;
+        font-size: 8.4pt;
+        margin-bottom: 3px;
         break-inside: avoid;
       }
 
@@ -656,7 +656,7 @@
       #printSheet .cv-proj .cv-meta {
         display: block;
         color: #64748b;
-        font-size: 7.9pt;
+        font-size: 7.7pt;
       }
 
       #printSheet .cv-projs {
@@ -670,9 +670,17 @@
         margin-right: 3px;
       }
 
+      #printSheet .cv-photo {
+        display: block;
+        width: 28mm;
+        margin: 0 auto 8px;
+        border-radius: 2mm;
+        border: 1px solid #e2e8f0;
+      }
+
       #printSheet .cv-skill {
-        font-size: 8.8pt;
-        margin-bottom: 4px;
+        font-size: 8.7pt;
+        margin-bottom: 3px;
       }
 
       #printSheet .cv-skill b {
@@ -680,8 +688,8 @@
       }
 
       #printSheet .cv-form {
-        font-size: 8.8pt;
-        margin-bottom: 5px;
+        font-size: 8.7pt;
+        margin-bottom: 4px;
         break-inside: avoid;
       }
 
@@ -690,7 +698,7 @@
       }
 
       #printSheet .cv-foot {
-        margin-top: 9px;
+        margin-top: 8px;
         padding-top: 5px;
         border-top: 1px solid #e2e8f0;
         font-size: 8pt;
@@ -1613,6 +1621,7 @@
             </div>
 
             <div class="cv-side">
+              <img class="cv-photo" src="flo.jpg" alt="${esc(PROFILE.name)}">
               <h2>Compétences</h2>
               ${skills}
 
