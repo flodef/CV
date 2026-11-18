@@ -505,6 +505,19 @@
         }
       }
 
+      @media (max-width: 560px) {
+        .psheet-bar {
+          flex-wrap: wrap;
+          gap: 8px;
+          padding: 0 12px;
+          box-sizing: border-box;
+        }
+        .psheet-printer-opt {
+          flex-basis: 100%;
+          justify-content: center;
+        }
+      }
+
       @media (max-width: 600px) {
         #infoPanel {
           right: 12px;
@@ -613,6 +626,28 @@
         cursor: pointer;
       }
 
+      .psheet-printer-opt {
+        pointer-events: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #1f2937;
+        background: #fff;
+        border-radius: 8px;
+        padding: 9px 13px;
+        cursor: pointer;
+        user-select: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      }
+
+      .psheet-printer-opt input {
+        margin: 0;
+        accent-color: #007bff;
+        cursor: pointer;
+      }
+
       #psheetPrintBtn {
         background: #007bff;
         color: #fff;
@@ -646,6 +681,12 @@
         #printSheet .cv-layout {
           flex: 1 0 auto;
         }
+      }
+
+      #printSheet,
+      #printSheet * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
 
       #printSheet {
@@ -1007,7 +1048,11 @@
           flex-direction: column;
           height: 297mm;
           box-sizing: border-box;
-          padding: 9mm 10mm 9mm 9mm;
+          padding: 9mm 10mm 9mm 0;
+        }
+
+        body.cv-printer #printSheet {
+          padding-left: 9mm;
         }
         #printSheet .cv-photo {
           margin-top: 8mm;
@@ -1065,6 +1110,7 @@
     <div id="psheetOverlay">
       <div class="psheet-bar">
         <button id="psheetPrintBtn"><i class="ti ti-printer"></i> Imprimer / Enregistrer en PDF</button>
+        <label class="psheet-printer-opt" title="Cochez si vous imprimez sur papier (marge de sécurité)"><input type="checkbox" id="psheetPrinterChk" /> Imprimante</label>
         <button id="psheetCloseBtn" title="Fermer"><i class="ti ti-x"></i></button>
       </div>
       <div class="psheet-page"><div id="printSheet"></div></div>
@@ -1993,6 +2039,9 @@
         psheetOverlay.classList.add("open");
       });
       document.getElementById("psheetPrintBtn").addEventListener("click", () => window.print());
+      document.getElementById("psheetPrinterChk").addEventListener("change", (e) => {
+        document.body.classList.toggle("cv-printer", e.target.checked);
+      });
       document.getElementById("psheetCloseBtn").addEventListener("click", () =>
         psheetOverlay.classList.remove("open")
       );
