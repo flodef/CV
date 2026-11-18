@@ -362,8 +362,8 @@
         vertical-align: -1px;
       }
 
-      .acc.open .acc-head .ti {
-        transform: rotate(180deg);
+      .acc.open .acc-head .ti-chevron-down {
+        display: none;
       }
 
       .acc-body {
@@ -791,7 +791,7 @@
       let hovered = -1;
       let activeFilter = null; // { kind: 'domain'|'tech', key } | null
       let camAnim = null;
-      let viewOX = 0, viewOY = 0;
+      let viewOX = 0, viewOY = 0, fitScale = 1;
       let dragging = false;
       let lastX = 0, lastY = 0, downX = 0, downY = 0, downT = 0;
 
@@ -809,7 +809,7 @@
       function project(p) {
         const r = rotatePoint(p);
         const s = CAM / (CAM - r[2]);
-        const Rpx = Math.min(W, H) * 0.5 * zoom;
+        const Rpx = Math.min(W, H) * 0.5 * zoom * fitScale;
         return {
           x: W / 2 + viewOX + r[0] * s * Rpx,
           y: H / 2 + viewOY - r[1] * s * Rpx,
@@ -896,11 +896,19 @@
             if (isDimmed(n)) continue;
             if (n.sx < x0) x0 = n.sx;
             if (n.sx > x1) x1 = n.sx;
-            if (n.sy - 22 < y0) y0 = n.sy - 22; // place pour le label au-dessus
+            if (n.sy - n.px - 20 < y0) y0 = n.sy - n.px - 20; // place pour le label au-dessus
             if (n.sy + n.px + 4 > y1) y1 = n.sy + n.px + 4;
           }
           viewOX += (W / 2 - (x0 + x1) / 2) * 0.05;
-          viewOY += (H / 2 - (y0 + y1) / 2) * 0.05;
+          viewOY += (H / 2 - (y0 + y1) / 2 + 3) * 0.05; // +3 : marge haute pour les labels
+
+          // zoom-out doux si le contenu (labels inclus) dépasse l'écran
+          const fit = Math.min(
+            1,
+            (fitScale * (W - 70)) / Math.max(1, x1 - x0),
+            (fitScale * (H - 30)) / Math.max(1, y1 - y0)
+          );
+          fitScale += (fit - fitScale) * 0.05;
         }
 
         // edges
@@ -1050,7 +1058,7 @@
               : "#0f172a"
             : `rgba(${night ? "226,232,240" : "30,41,59"},${alpha})`;
           ctx.font = n.isFlo ? "bold 12px Helvetica Neue, sans-serif" : "11px Helvetica Neue, sans-serif";
-          ctx.fillText(n.name, n.sx, n.sy - n.px - 8);
+          ctx.fillText(n.name, Math.max(40, Math.min(W - 40, n.sx)), n.sy - n.px - 8);
         }
 
         requestAnimationFrame(draw);
