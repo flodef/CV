@@ -507,14 +507,11 @@
 
       @media (max-width: 560px) {
         .psheet-bar {
-          flex-wrap: wrap;
+          flex-direction: column;
+          align-items: center;
           gap: 8px;
           padding: 0 12px;
           box-sizing: border-box;
-        }
-        .psheet-printer-opt {
-          flex-basis: 100%;
-          justify-content: center;
         }
       }
 
@@ -626,26 +623,10 @@
         cursor: pointer;
       }
 
-      .psheet-printer-opt {
-        pointer-events: auto;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 12px;
-        font-weight: 600;
-        color: #1f2937;
+      #psheetPdfBtn {
         background: #fff;
-        border-radius: 8px;
-        padding: 9px 13px;
-        cursor: pointer;
-        user-select: none;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-      }
-
-      .psheet-printer-opt input {
-        margin: 0;
-        accent-color: #007bff;
-        cursor: pointer;
+        color: #1f2937;
+        border: 1px solid #e2e8f0;
       }
 
       #psheetPrintBtn {
@@ -1109,8 +1090,8 @@
 
     <div id="psheetOverlay">
       <div class="psheet-bar">
-        <button id="psheetPrintBtn"><i class="ti ti-printer"></i> Imprimer / Enregistrer en PDF</button>
-        <label class="psheet-printer-opt" title="Cochez si vous imprimez sur papier (marge de sécurité)"><input type="checkbox" id="psheetPrinterChk" /> Imprimante</label>
+        <button id="psheetPrintBtn"><i class="ti ti-printer"></i> Imprimer</button>
+        <button id="psheetPdfBtn"><i class="ti ti-file-type-pdf"></i> Enregistrer en PDF</button>
         <button id="psheetCloseBtn" title="Fermer"><i class="ti ti-x"></i></button>
       </div>
       <div class="psheet-page"><div id="printSheet"></div></div>
@@ -2038,9 +2019,13 @@
       document.getElementById("printBtn").addEventListener("click", () => {
         psheetOverlay.classList.add("open");
       });
-      document.getElementById("psheetPrintBtn").addEventListener("click", () => window.print());
-      document.getElementById("psheetPrinterChk").addEventListener("change", (e) => {
-        document.body.classList.toggle("cv-printer", e.target.checked);
+      document.getElementById("psheetPrintBtn").addEventListener("click", () => {
+        document.body.classList.add("cv-printer");
+        window.print();
+      });
+      document.getElementById("psheetPdfBtn").addEventListener("click", () => {
+        document.body.classList.remove("cv-printer");
+        window.print();
       });
       document.getElementById("psheetCloseBtn").addEventListener("click", () =>
         psheetOverlay.classList.remove("open")
