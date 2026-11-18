@@ -505,16 +505,6 @@
         }
       }
 
-      @media (max-width: 560px) {
-        .psheet-bar {
-          flex-direction: column;
-          align-items: center;
-          gap: 8px;
-          padding: 0 12px;
-          box-sizing: border-box;
-        }
-      }
-
       @media (max-width: 600px) {
         #infoPanel {
           right: 12px;
@@ -621,12 +611,6 @@
         border-radius: 8px;
         padding: 9px 18px;
         cursor: pointer;
-      }
-
-      #psheetPdfBtn {
-        background: #fff;
-        color: #1f2937;
-        border: 1px solid #e2e8f0;
       }
 
       #psheetPrintBtn {
@@ -1031,10 +1015,6 @@
           box-sizing: border-box;
           padding: 9mm 10mm 9mm 0;
         }
-
-        body.cv-printer #printSheet {
-          padding-left: 9mm;
-        }
         #printSheet .cv-photo {
           margin-top: 8mm;
         }
@@ -1090,8 +1070,7 @@
 
     <div id="psheetOverlay">
       <div class="psheet-bar">
-        <button id="psheetPrintBtn"><i class="ti ti-printer"></i> Imprimer</button>
-        <button id="psheetPdfBtn"><i class="ti ti-file-type-pdf"></i> Enregistrer en PDF</button>
+        <button id="psheetPrintBtn"><i class="ti ti-printer"></i> Imprimer / Enregistrer en PDF</button>
         <button id="psheetCloseBtn" title="Fermer"><i class="ti ti-x"></i></button>
       </div>
       <div class="psheet-page"><div id="printSheet"></div></div>
@@ -2019,14 +1998,7 @@
       document.getElementById("printBtn").addEventListener("click", () => {
         psheetOverlay.classList.add("open");
       });
-      document.getElementById("psheetPrintBtn").addEventListener("click", () => {
-        document.body.classList.add("cv-printer");
-        window.print();
-      });
-      document.getElementById("psheetPdfBtn").addEventListener("click", () => {
-        document.body.classList.remove("cv-printer");
-        window.print();
-      });
+      document.getElementById("psheetPrintBtn").addEventListener("click", () => window.print());
       document.getElementById("psheetCloseBtn").addEventListener("click", () =>
         psheetOverlay.classList.remove("open")
       );
