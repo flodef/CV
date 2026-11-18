@@ -854,14 +854,11 @@
       }
 
       #printSheet .cv-dot {
-        font-style: normal;
-        font-size: 2.1mm;
-        line-height: 1;
+        width: 2.1mm;
+        height: 2.1mm;
+        display: block;
+        flex: none;
         color: #0f3669;
-      }
-
-      #printSheet .cv-dot::before {
-        content: "\25CF";
       }
 
       #printSheet .cv-dot.off {
@@ -1885,7 +1882,7 @@
         ];
         const dots = (n) =>
           `<span class="cv-dots">${[0, 1, 2, 3, 4]
-            .map((i) => `<i class="cv-dot${i < n ? "" : " off"}"></i>`)
+            .map((i) => `<svg class="cv-dot${i < n ? "" : " off"}" viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="5" r="4.4" fill="currentColor"/></svg>`)
             .join("")}</span>`;
         const skills = SKILL_LINES.map(
           ([g, t, l]) => `<div class="cv-skill"><span class="cv-sl"><span class="cv-sg"><b>${g}</b> —</span><span class="cv-st">${t}</span></span>${dots(l)}</div>`
