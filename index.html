@@ -791,6 +791,7 @@
       let hovered = -1;
       let activeFilter = null; // { kind: 'domain'|'tech', key } | null
       let camAnim = null;
+      let viewOX = 0, viewOY = 0;
       let dragging = false;
       let lastX = 0, lastY = 0, downX = 0, downY = 0, downT = 0;
 
@@ -810,8 +811,8 @@
         const s = CAM / (CAM - r[2]);
         const Rpx = Math.min(W, H) * 0.5 * zoom;
         return {
-          x: W / 2 + r[0] * s * Rpx,
-          y: H / 2 - r[1] * s * Rpx,
+          x: W / 2 + viewOX + r[0] * s * Rpx,
+          y: H / 2 + viewOY - r[1] * s * Rpx,
           z: r[2],
           s,
           Rpx,
@@ -858,7 +859,9 @@
           for (const st of stars) {
             const a = 0.2 + 0.6 * (0.5 + 0.5 * Math.sin(t * st.s + st.p));
             ctx.fillStyle = st.warm ? `rgba(253,230,138,${a})` : `rgba(203,213,225,${a})`;
-            ctx.fillRect(st.x * W, st.y * H, st.r * 2, st.r * 2);
+            ctx.beginPath();
+            ctx.arc(st.x * W, st.y * H, st.r, 0, TAU);
+            ctx.fill();
           }
         }
 
@@ -885,6 +888,20 @@
           n.sx = pr.x; n.sy = pr.y; n.depth = pr.z;
           n.px = n.wr * pr.s * pr.Rpx;
         });
+
+        // recentrage : la bounding box des nœuds visibles reste centrée à l'écran
+        {
+          let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+          for (const n of nodes) {
+            if (isDimmed(n)) continue;
+            if (n.sx < x0) x0 = n.sx;
+            if (n.sx > x1) x1 = n.sx;
+            if (n.sy - 22 < y0) y0 = n.sy - 22; // place pour le label au-dessus
+            if (n.sy + n.px + 4 > y1) y1 = n.sy + n.px + 4;
+          }
+          viewOX += (W / 2 - (x0 + x1) / 2) * 0.05;
+          viewOY += (H / 2 - (y0 + y1) / 2) * 0.05;
+        }
 
         // edges
         ctx.lineWidth = 1;
@@ -1282,9 +1299,9 @@
       document.querySelectorAll("#infoPanel .acc-head").forEach((head) => {
         head.addEventListener("click", () => {
           const acc = head.parentElement;
-          const wasOpen = acc.classList.contains("open");
+          if (acc.classList.contains("open")) return; // une section reste toujours ouverte
           document.querySelectorAll("#infoPanel .acc").forEach((a) => a.classList.remove("open"));
-          if (!wasOpen) acc.classList.add("open");
+          acc.classList.add("open");
         });
       });
 
