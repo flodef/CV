@@ -235,6 +235,36 @@
         margin-bottom: 14px;
       }
 
+      .modal-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .modal-head .active-badge {
+        flex: none;
+        margin: 0 0 8px;
+      }
+
+      .modal-footer a .go-chev {
+        font-size: 1.6em;
+        font-weight: 800;
+        margin-left: 4px;
+        vertical-align: -3px;
+      }
+
+      @media (max-width: 560px) {
+        .modal-head {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0;
+        }
+        .modal-head .active-badge {
+          margin: 0 0 8px;
+        }
+      }
+
       .meta-line {
         display: flex;
         align-items: center;
@@ -620,24 +650,30 @@
         left: 0;
         right: 0;
         bottom: 0;
-        height: 13mm;
+        height: 14mm;
         background: #0f3669;
       }
 
       #printSheet .cv-band-bot svg {
         position: absolute;
-        top: -6mm;
+        top: -8mm;
         left: 0;
         width: 100%;
-        height: 6mm;
+        height: 8mm;
         display: block;
       }
 
       #printSheet .cv-photo {
         display: block;
-        width: 26mm;
-        margin: 24mm auto 4mm;
-        border-radius: 1.5mm;
+        width: 30mm;
+        height: 30mm;
+        object-fit: cover;
+        margin: 19mm auto 5mm;
+        border-radius: 50%;
+        border: 1.6mm solid #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+        position: relative;
+        z-index: 2;
       }
 
       #printSheet h2 {
@@ -665,7 +701,10 @@
 
       #printSheet .cv-citem i {
         color: #0f3669;
-        font-size: 9pt;
+        font-size: 11.5pt;
+        width: 5mm;
+        text-align: center;
+        flex: none;
       }
 
       #printSheet .cv-citem a {
@@ -713,19 +752,6 @@
 
       #printSheet .cv-dot.off {
         background: #c2c4c6;
-      }
-
-      #printSheet .cv-skill::before,
-      #printSheet .cv-lang::before {
-        content: "\25AA";
-        color: #0f3669;
-        margin-right: 1.6mm;
-      }
-
-      #printSheet .cv-int {
-        font-size: 8.6pt;
-        color: #333;
-        margin: 0;
       }
 
       /* ---------- colonne principale ---------- */
@@ -777,13 +803,6 @@
         font-size: 8.4pt;
         color: #444;
         margin: 0.6mm 0 0;
-      }
-
-      #printSheet .cv-exp p::before {
-        content: "\2022";
-        color: #0f3669;
-        font-weight: 700;
-        margin-right: 1mm;
       }
 
       #printSheet .cv-proj {
@@ -1818,10 +1837,10 @@
               ${langs}
 
               <h2>Centres d'intérêt</h2>
-              <p class="cv-int">${esc(PROFILE.passions)}</p>
+              ${PROFILE.passions.split("·").map((p) => `<div class="cv-int">${esc(p.trim())}</div>`).join("")}
 
               <div class="cv-band-bot">
-                <svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0,12 L200,12 L200,2 C150,11 50,11 0,2 Z" fill="#0f3669"/></svg>
+                <svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M0,16 L200,16 L200,2 C150,15 50,15 0,2 Z" fill="#0f3669"/></svg>
               </div>
             </div>
 
@@ -1919,9 +1938,10 @@
           })
           .join(" ");
         document.getElementById("popupContent").innerHTML = `
-          <div class="modal-label">${n.name}</div>
-          ${n.active ? '<div class="active-badge"><span class="pulse-dot"></span>en cours</div>' : ""}
-          ${n.commits ? `<div class="modal-sub">${n.commits} commits</div>` : ""}
+          <div class="modal-head">
+            <div class="modal-label">${n.name}</div>
+            ${n.active ? '<div class="active-badge"><span class="pulse-dot"></span>en cours</div>' : ""}
+          </div>
           <div class="meta-line">
             <span class="lbl">Secteur</span>
             <button class="sector-chip" onclick="toggleFilter('domain','${n.domain}');closeModal()">
@@ -1930,9 +1950,10 @@
           </div>
           ${techChips ? `<div class="meta-line"><span class="lbl">Technos</span><span style="display:flex;flex-wrap:wrap;gap:6px;">${techChips}</span></div>` : ""}
           <div class="meta-line"><span class="lbl">Période</span><span>${period}<span class="dur-pre"> — </span><span class="dur">${durStr(n.start, n.end)}</span></span></div>
+          ${n.commits ? `<div class="meta-line"><span class="lbl">Commits</span><span>${n.commits.toLocaleString("fr-FR")}</span></div>` : ""}
           <div class="modal-comment">${n.desc}</div>
           <div class="modal-footer">
-            ${n.url ? `<a href="${n.url}" target="_blank">${/github|gitlab|duniter/.test(n.url) ? "Voir le projet" : "Visiter le site"} →</a>` : ""}
+            ${n.url ? `<a href="${n.url}" target="_blank">${/github|gitlab|duniter/.test(n.url) ? "Voir le projet" : "Visiter le site"} <span class="go-chev">›</span></a>` : ""}
           </div>
         `;
         modal.style.display = "flex";
