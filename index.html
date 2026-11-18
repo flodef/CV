@@ -580,6 +580,33 @@
         box-sizing: border-box;
       }
 
+      @media screen and (min-width: 721px) {
+        .psheet-page {
+          min-height: 1102px;
+          display: flex;
+          flex-direction: column;
+        }
+        #printSheet {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        #printSheet .cv-layout {
+          flex: 1 0 auto;
+        }
+        .psheet-bar {
+          position: fixed;
+          top: 14px;
+          right: 16px;
+          left: auto;
+          justify-content: flex-end;
+          padding: 0;
+        }
+        .psheet-bar button {
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+      }
+
       #printSheet {
         font-family: "Liberation Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
         color: #111;
@@ -598,7 +625,7 @@
         width: 66mm;
         background: #f3f5f8;
         padding: 12mm 9mm 16mm 13mm;
-        margin: -12mm 0 -12mm -13mm;
+        margin: -12mm 0 -12mm 0;
         box-sizing: border-box;
         position: relative;
       }
@@ -610,21 +637,22 @@
         left: 0;
         right: 0;
         background: #0f3669;
-        height: 17mm;
-        padding: 5mm 10mm 0;
+        height: 19mm;
+        padding: 2.5mm 8mm 0;
         box-sizing: border-box;
+        text-align: center;
       }
 
       #printSheet .cv-band-top .cv-name2 {
         color: #fff;
-        font-size: 14pt;
+        font-size: 12pt;
         font-weight: 700;
-        margin: 0 0 1mm;
+        margin: 0 0 0.3mm;
       }
 
       #printSheet .cv-band-top .cv-role2 {
         color: rgba(255, 255, 255, 0.78);
-        font-size: 8.6pt;
+        font-size: 7.8pt;
         font-weight: 600;
         margin: 0;
       }
@@ -632,7 +660,7 @@
       /* languette navy arrondie sous le bandeau (comme le modèle) */
       #printSheet .cv-band-curve {
         position: absolute;
-        top: 16mm;
+        top: 19mm;
         left: 0;
         right: 0;
         height: 20mm;
@@ -665,10 +693,10 @@
 
       #printSheet .cv-photo {
         display: block;
-        width: 30mm;
-        height: 30mm;
+        width: 27mm;
+        height: 27mm;
         object-fit: cover;
-        margin: 19mm auto 5mm;
+        margin: 4mm auto 5mm;
         border-radius: 50%;
         border: 1.6mm solid #fff;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
@@ -729,6 +757,21 @@
       #printSheet .cv-sl {
         flex: 1;
         min-width: 0;
+      }
+
+      #printSheet .cv-sl:has(.cv-sg) {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #printSheet .cv-sg {
+        color: #0f3669;
+        font-weight: 700;
+      }
+
+      #printSheet .cv-st {
+        font-size: 8pt;
+        color: #555;
       }
 
       #printSheet .cv-int {
@@ -892,8 +935,17 @@
           padding: 0;
         }
         #printSheet {
-          display: block !important;
-          padding: 9mm 10mm 9mm 0;
+          display: flex !important;
+          flex-direction: column;
+          height: 297mm;
+          box-sizing: border-box;
+          padding: 9mm 10mm 9mm 9mm;
+        }
+        #printSheet .cv-photo {
+          margin-top: 7mm;
+        }
+        #printSheet .cv-layout {
+          flex: 1 0 auto;
         }
         #printSheet .cv-side {
           width: 66mm;
@@ -907,7 +959,7 @@
   <body>
     <canvas id="net"></canvas>
 
-    <button id="printBtn" title="Version papier / PDF"><i class="ti ti-printer"></i></button>
+    <button id="printBtn" title="Version papier / PDF"><i class="ti ti-file-cv"></i></button>
     <button id="themeBtn" title="Thème : système"><i class="ti ti-device-laptop"></i></button>
     <button id="infoBtn" title="Infos & contrôles"><i class="ti ti-info-circle"></i></button>
 
@@ -1765,7 +1817,7 @@
             .map((i) => `<i class="cv-dot${i < n ? "" : " off"}"></i>`)
             .join("")}</span>`;
         const skills = SKILL_LINES.map(
-          ([g, t, l]) => `<div class="cv-skill"><span class="cv-sl"><b>${g}</b> — ${t}</span>${dots(l)}</div>`
+          ([g, t, l]) => `<div class="cv-skill"><span class="cv-sl"><span class="cv-sg"><b>${g}</b> —</span><span class="cv-st">${t}</span></span>${dots(l)}</div>`
         ).join("");
 
         const expHtml = pro
@@ -1846,7 +1898,8 @@
 
             <div class="cv-main">
               <h2>Profil</h2>
-              <p>Développeur full-stack — applications web, gestion financière et blockchain. ${yearsCode} ans d'expérience, de l'intranet pharmaceutique (2004) aux plateformes décentralisées sur Solana. Fondateur de FiMs ; ${PROJECTS.length} projets & expériences, ${fmtN(totalCommits)} commits publics.</p>
+              <p>Développeur full-stack — applications web, gestion financière et blockchain. ${yearsCode} ans d'expérience, de l'intranet pharmaceutique (2004) aux plateformes décentralisées sur Solana.</p>
+              <p><b>Fondateur de FiMs</b> ; ${PROJECTS.length} projets & expériences, ${fmtN(totalCommits)} commits publics.</p>
 
               <h2>Expérience professionnelle</h2>
               ${expHtml}
@@ -1856,10 +1909,10 @@
 
               <h2>Formation</h2>
               ${formHtml}
+
+              <div class="cv-foot">${esc(PROFILE.name)} — <a href="https://cv.fims.fi" style="color:#999;">cv.fims.fi</a></div>
             </div>
           </div>
-
-          <div class="cv-foot">${esc(PROFILE.name)} — <a href="https://cv.fims.fi" style="color:#999;">cv.fims.fi</a></div>
         `;
       }
       buildPrintSheet();
