@@ -580,7 +580,8 @@
         left: 0;
         right: 0;
         background: #0f3669;
-        padding: 8mm 10mm 10mm;
+        height: 17mm;
+        padding: 5mm 10mm 0;
         box-sizing: border-box;
       }
 
@@ -598,39 +599,44 @@
         margin: 0;
       }
 
-      #printSheet .cv-band-top svg {
+      /* languette navy arrondie sous le bandeau (comme le modèle) */
+      #printSheet .cv-band-curve {
         position: absolute;
+        top: 16mm;
         left: 0;
         right: 0;
-        bottom: -2.6mm;
+        height: 20mm;
+      }
+
+      #printSheet .cv-band-curve svg {
         width: 100%;
-        height: 2.6mm;
+        height: 100%;
         display: block;
       }
 
-      /* bandeau navy en bas */
+      /* bandeau navy en bas, haut arrondi */
       #printSheet .cv-band-bot {
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        height: 10mm;
+        height: 13mm;
         background: #0f3669;
       }
 
       #printSheet .cv-band-bot svg {
         position: absolute;
-        top: -2.6mm;
+        top: -6mm;
         left: 0;
         width: 100%;
-        height: 2.6mm;
+        height: 6mm;
         display: block;
       }
 
       #printSheet .cv-photo {
         display: block;
         width: 26mm;
-        margin: 30mm 0 4mm;
+        margin: 24mm auto 4mm;
         border-radius: 1.5mm;
       }
 
@@ -1698,12 +1704,27 @@
           "Warren Contract", "Valentin Ostheo", "cmd.bzh",
           "Open Source POS",
         ]);
-        const PAPER_NAMES = {
-          "DC Admin": "Digi-Carte Admin",
-          "DC GSWS": "Digi-Carte GSWS",
-          "DC Menu": "Digi-Carte Menu",
-        };
-        const repos = PROJECTS.filter((p) => PAPER.has(p.name)).sort(
+        const MERGE = [
+          ["FiMs Wallet", ["FiMs Wallet", "FiMs Wallet V3"]],
+          ["Digi-Carte", ["Digi-Carte Deploy", "DC Admin", "DC GSWS", "DC Menu"]],
+        ];
+        const used = new Set();
+        const merged = MERGE.map(([name, members]) => {
+          const ms = PROJECTS.filter((p) => members.includes(p.name));
+          ms.forEach((m) => used.add(m.name));
+          return {
+            name,
+            start: ms.map((m) => m.start).sort()[0],
+            end: ms.some((m) => m.active) ? "now" : ms.map((m) => m.end).sort().pop(),
+            commits: ms.reduce((a, m) => a + (m.commits || 0), 0),
+            active: ms.some((m) => m.active),
+            techs: [...new Set(ms.flatMap((m) => m.techs || []))],
+          };
+        });
+        const repos = [
+          ...PROJECTS.filter((p) => PAPER.has(p.name) && !used.has(p.name)),
+          ...merged,
+        ].sort(
           (a, b) => (b.active ? 1 : 0) - (a.active ? 1 : 0) || (b.commits || 0) - (a.commits || 0)
         );
         const techNames = (p) =>
@@ -1740,7 +1761,7 @@
         const projHtml = repos
           .map((p) => {
             const tn = techNames(p).join(" · ");
-            return `<div class="cv-proj${p.active ? " on" : ""}"><span class="cv-pn">${esc(PAPER_NAMES[p.name] || p.name)}</span>${tn ? `<span class="cv-pt">${esc(tn)}</span>` : ""}<span class="cv-pd">${yrs(p)}</span></div>`;
+            return `<div class="cv-proj${p.active ? " on" : ""}"><span class="cv-pn">${esc(p.name)}</span>${tn ? `<span class="cv-pt">${esc(tn)}</span>` : ""}<span class="cv-pd">${yrs(p)}</span></div>`;
           })
           .join("");
 
@@ -1782,7 +1803,9 @@
               <div class="cv-band-top">
                 <h1 class="cv-name2">${esc(PROFILE.name)}</h1>
                 <div class="cv-role2">${esc(PROFILE.role)} · ${age} ans</div>
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0,0 L200,0 L200,3 C150,10 50,10 0,3 Z" fill="#0f3669"/></svg>
+              </div>
+              <div class="cv-band-curve" aria-hidden="true">
+                <svg viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M0,0 L200,0 L200,7 C150,19 50,19 0,7 Z" fill="#0f3669"/></svg>
               </div>
               <img class="cv-photo" src="flo.jpg" alt="${esc(PROFILE.name)}">
 
@@ -1798,7 +1821,7 @@
               <p class="cv-int">${esc(PROFILE.passions)}</p>
 
               <div class="cv-band-bot">
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0,10 L200,10 L200,3 C150,-3 50,-3 0,3 Z" fill="#0f3669"/></svg>
+                <svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0,12 L200,12 L200,2 C150,11 50,11 0,2 Z" fill="#0f3669"/></svg>
               </div>
             </div>
 
