@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "tabler-icons";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/tabler-icons.woff2") format("woff2");
+}
+
+.ti {
+  font-family: "tabler-icons" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ti-brand-github:before{content:"\ec1c"}
+.ti-cake:before{content:"\f00f"}
+.ti-chevron-down:before{content:"\ea5f"}
+.ti-chevron-up:before{content:"\ea62"}
+.ti-device-laptop:before{content:"\eb64"}
+.ti-file-cv:before{content:"\fa5a"}
+.ti-info-circle:before{content:"\eac5"}
+.ti-mail:before{content:"\eae5"}
+.ti-map-pin:before{content:"\eae8"}
+.ti-moon:before{content:"\eaf8"}
+.ti-player-pause:before{content:"\ed45"}
+.ti-player-play:before{content:"\ed46"}
+.ti-printer:before{content:"\eb0e"}
+.ti-refresh:before{content:"\eb13"}
+.ti-sun:before{content:"\eb30"}
+.ti-x:before{content:"\eb55"}
