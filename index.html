@@ -1000,11 +1000,13 @@
           } else {
             if (night && n.domain === "finance") {
               // planète à anneaux
+              ctx.globalAlpha = alpha * 0.7;
               ctx.strokeStyle = "rgba(203,213,225,0.5)";
               ctx.lineWidth = Math.max(1, r * 0.3);
               ctx.beginPath();
               ctx.ellipse(n.sx, n.sy, r * 1.85, r * 0.5, -0.35, 0, TAU);
               ctx.stroke();
+              ctx.globalAlpha = 1;
             }
             ctx.beginPath();
             ctx.arc(n.sx, n.sy, r, 0, TAU);
