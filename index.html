@@ -42,7 +42,8 @@
 
       /* ---------- bouton info ---------- */
       #infoBtn,
-      #themeBtn {
+      #themeBtn,
+      #printBtn {
         position: fixed;
         right: 20px;
         bottom: 20px;
@@ -64,13 +65,18 @@
       }
 
       #infoBtn:hover,
-      #themeBtn:hover {
+      #themeBtn:hover,
+      #printBtn:hover {
         transform: scale(1.08);
         color: #007bff;
       }
 
       #themeBtn {
         right: 76px;
+      }
+
+      #printBtn {
+        right: 132px;
       }
 
       /* ---------- panneau info ---------- */
@@ -434,9 +440,11 @@
       body.night .panel-btn { border-color: #334155; background: #0f172a; color: #cbd5e1; }
       body.night .panel-btn:hover { border-color: #60a5fa; color: #60a5fa; }
       body.night #infoBtn,
-      body.night #themeBtn { background: rgba(15, 23, 42, 0.85); border-color: #334155; color: #94a3b8; }
+      body.night #themeBtn,
+      body.night #printBtn { background: rgba(15, 23, 42, 0.85); border-color: #334155; color: #94a3b8; }
       body.night #infoBtn:hover,
-      body.night #themeBtn:hover { color: #60a5fa; }
+      body.night #themeBtn:hover,
+      body.night #printBtn:hover { color: #60a5fa; }
 
       body.night .modal { background: rgba(2, 6, 23, 0.6); }
       body.night .modal-content { background: #0f172a; border-color: #1e293b; }
@@ -481,6 +489,106 @@
           right: 68px;
           bottom: 14px;
         }
+
+        #printBtn {
+          right: 122px;
+          bottom: 14px;
+        }
+      }
+
+      /* ---------- version papier / PDF ---------- */
+      #printSheet {
+        display: none;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #111;
+        font-size: 9.5pt;
+        line-height: 1.4;
+      }
+
+      #printSheet h1 {
+        font-size: 17pt;
+        margin: 0 0 2px;
+        color: #007bff;
+      }
+
+      #printSheet .psub {
+        font-size: 10pt;
+        color: #444;
+        margin-bottom: 2px;
+      }
+
+      #printSheet .pcontact {
+        font-size: 8.5pt;
+        color: #555;
+        margin-bottom: 10px;
+      }
+
+      #printSheet h2 {
+        font-size: 10pt;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #007bff;
+        border-bottom: 1px solid #ccc;
+        margin: 10px 0 5px;
+        padding-bottom: 2px;
+      }
+
+      #printSheet .pexp {
+        margin-bottom: 5px;
+      }
+
+      #printSheet .pexp .pper {
+        color: #666;
+        font-size: 8.5pt;
+      }
+
+      #printSheet .pexp p {
+        margin: 1px 0 0;
+        font-size: 8.5pt;
+        color: #333;
+      }
+
+      #printSheet .pcols {
+        column-count: 2;
+        column-gap: 18px;
+      }
+
+      #printSheet .pi {
+        font-size: 8.5pt;
+        margin-bottom: 3px;
+        break-inside: avoid;
+      }
+
+      #printSheet .pi .pmeta {
+        color: #555;
+      }
+
+      #printSheet .pfoot {
+        margin-top: 10px;
+        font-size: 8.5pt;
+        color: #555;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 11mm;
+      }
+
+      @media print {
+        body {
+          background: #fff !important;
+        }
+        #net,
+        #infoBtn,
+        #themeBtn,
+        #printBtn,
+        #infoPanel,
+        .modal {
+          display: none !important;
+        }
+        #printSheet {
+          display: block !important;
+        }
       }
     </style>
   </head>
@@ -488,6 +596,7 @@
   <body>
     <canvas id="net"></canvas>
 
+    <button id="printBtn" title="Version papier / PDF"><i class="ti ti-printer"></i></button>
     <button id="themeBtn" title="Thème : système"><i class="ti ti-device-laptop"></i></button>
     <button id="infoBtn" title="Infos & contrôles"><i class="ti ti-info-circle"></i></button>
 
@@ -521,6 +630,8 @@
         </div>
       </div>
     </div>
+
+    <div id="printSheet"></div>
 
     <div class="modal" id="popupModal">
       <div class="modal-content">
@@ -1276,6 +1387,57 @@
       window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
       applyTheme();
 
+      /* ---- version papier / PDF ---- */
+      function buildPrintSheet() {
+        const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+        const fd = (s) => (s === "now" ? "aujourd'hui" : fmtDate(s));
+        const period = (p) => `${fd(p.start)} → ${p.end === "now" ? "aujourd'hui" : fd(p.end)} (${durStr(p.start, p.end)})`;
+        const pro = PROJECTS.filter((p) => p.domain === "pro");
+        const repos = PROJECTS.filter((p) => p.domain !== "pro").sort(
+          (a, b) => parseDate(b.start) - parseDate(a.start)
+        );
+        const techNames = (p) =>
+          (p.techs || []).map((t) => TECHS[t] && TECHS[t].label).filter(Boolean).join(", ");
+        const age = Math.floor((NOW - Date.parse(PROFILE.birth)) / 31557600000);
+        document.getElementById("printSheet").innerHTML = `
+          <h1>${esc(PROFILE.name)}</h1>
+          <div class="psub">${esc(PROFILE.role)} — ${age} ans</div>
+          <div class="pcontact">${esc(PROFILE.location)} · ${esc(PROFILE.email)} · ${PROFILE.links
+            .map(([l, u]) => `<a href="${u}" style="color:#007bff;">${esc(l)}</a>`)
+            .join(" · ")}</div>
+
+          <h2>Expériences professionnelles</h2>
+          ${pro
+            .map(
+              (p) => `<div class="pexp"><b>${esc(p.name)}</b> <span class="pper">${period(p)}</span><p>${esc(p.desc)}</p></div>`
+            )
+            .join("")}
+
+          <h2>Projets — ${repos.length}</h2>
+          <div class="pcols">
+            ${repos
+              .map((p) => {
+                const bits = [period(p)];
+                const tn = techNames(p);
+                if (tn) bits.push(esc(tn));
+                if (p.commits) bits.push(`${p.commits} commits`);
+                if (p.active) bits.push("en cours");
+                return `<div class="pi"><b>${esc(p.name)}</b> <span class="pmeta">— ${bits.join(" · ")}</span></div>`;
+              })
+              .join("")}
+          </div>
+
+          <h2>Formation</h2>
+          ${PROFILE.formation.map(([a, b]) => `<div class="pi"><b>${esc(a)}</b> <span class="pmeta">— ${esc(b)}</span></div>`).join("")}
+
+          <div class="pfoot"><b>Langues :</b> ${esc(PROFILE.languages)}<br><b>Passions :</b> ${esc(PROFILE.passions)}</div>
+        `;
+      }
+      document.getElementById("printBtn").addEventListener("click", () => {
+        buildPrintSheet();
+        window.print();
+      });
+
       /* ---- légende ---- */
       const legendDom = document.getElementById("legendDomains");
       for (const [key, d] of Object.entries(DOMAINS)) {
@@ -1349,7 +1511,6 @@
           </div>
           ${techChips ? `<div class="meta-line"><span class="lbl">Technos</span><span style="display:flex;flex-wrap:wrap;gap:6px;">${techChips}</span></div>` : ""}
           <div class="meta-line"><span class="lbl">Période</span><span>${period}<span class="dur-pre"> — </span><span class="dur">${durStr(n.start, n.end)}</span></span></div>
-          ${n.commits ? `<div class="meta-line"><span class="lbl">Commits</span><span>${n.commits}</span></div>` : ""}
           <div class="modal-comment">${n.desc}</div>
           <div class="modal-footer">
             ${n.url ? `<a href="${n.url}" target="_blank">${/github|gitlab|duniter/.test(n.url) ? "Voir le projet" : "Visiter le site"} →</a>` : ""}
