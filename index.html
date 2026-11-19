@@ -1957,7 +1957,13 @@
         let ty = Math.atan2(-sx, sz);
         while (ty - yaw > Math.PI) ty -= TAU;
         while (ty - yaw < -Math.PI) ty += TAU;
-        const tp = Math.max(-1.45, Math.min(1.45, Math.atan2(sy, Math.hypot(sx, sz))));
+        let tp = Math.atan2(sy, Math.hypot(sx, sz));
+        if (count === 1) {
+          // un seul resultat : decaler la visee pour ne pas le superposer a Flojito
+          ty += 0.24;
+          tp -= 0.12;
+        }
+        tp = Math.max(-1.45, Math.min(1.45, tp));
         camAnim = { ty, tp };
         vyaw = vpitch = 0;
 
