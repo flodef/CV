@@ -1247,7 +1247,7 @@
     <div id="infoPanel">
       <span class="panel-close" onclick="togglePanel(false)"><i class="ti ti-x"></i></span>
       <!-- VERSION : incrementer a chaque commit (v2.X = nb de commits de la v2) -->
-      <h3>Toile de projets<span class="panel-ver">v2.46</span></h3>
+      <h3>Toile de projets<span class="panel-ver">v2.47</span></h3>
 
       <div class="acc open">
         <button class="acc-head"><span>Domaines <i class="ti ti-info-circle acc-hint" title="Cliquer pour filtrer"></i></span><i class="ti ti-chevron-down"></i></button>
@@ -1367,7 +1367,11 @@
         { name: "Duniter", url: "https://git.duniter.org/flodef", domain: "legacy", start: "2019-01", end: "2021-12", commits: 300, techs: ["rust", "js"], desc: "Contributions à la blockchain Duniter (nœud Rust) et au wallet web Cesium. Dates approximatives." },
         { name: "Angle Assets", url: "https://github.com/flodef/angle-assets", domain: "legacy", start: "2022-07", end: "2022-07", commits: 19, techs: [], desc: "Assets de branding Angle." },
         { name: "ginkgo", url: "https://git.duniter.org/flodef/ginkgo", domain: "legacy", start: "2023-07", end: "2024-05", commits: 100, techs: ["rust"], desc: "Projet Duniter « ginkgo » (git.duniter.org)." },
-      ];
+      ].filter(
+        // projets terminés de moins de 20 commits masqués
+        // (les expériences pro, sans commits, sont conservées)
+        (p) => p.active || p.end === "now" || !p.commits || p.commits >= 20
+      );
 
       const PROFILE = {
         name: "Flojito Stillnet",
