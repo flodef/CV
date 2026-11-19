@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flojito Stillnet - CV</title>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link type="image/png" sizes="100x100" rel="icon" href="./favicon.png" />
     <link rel="stylesheet" href="./vendor/tabler-icons/tabler-icons.css" />
     <link
       rel="preload"
@@ -239,6 +238,19 @@
         margin: 0 0 8px;
         font-size: 0.95em;
         color: #0f172a;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        padding-right: 24px;
+      }
+
+      .panel-ver {
+        font-size: 0.72em;
+        font-weight: 600;
+        color: #94a3b8;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
       }
 
       #infoPanel h4 {
@@ -1234,7 +1246,8 @@
 
     <div id="infoPanel">
       <span class="panel-close" onclick="togglePanel(false)"><i class="ti ti-x"></i></span>
-      <h3>Toile de projets</h3>
+      <!-- VERSION : incrementer a chaque commit (v2.X = nb de commits de la v2) -->
+      <h3>Toile de projets<span class="panel-ver">v2.42</span></h3>
 
       <div class="acc open">
         <button class="acc-head"><span>Domaines <i class="ti ti-info-circle acc-hint" title="Cliquer pour filtrer"></i></span><i class="ti ti-chevron-down"></i></button>
@@ -1333,7 +1346,7 @@
         { name: "Valentin Ostheo", url: "https://github.com/flodef/valentin-ostheo", domain: "web", start: "2025-05", end: "2025-07", commits: 37, techs: ["html"], desc: "Site vitrine pour un ostéopathe (pages statiques)." },
         { name: "Birthday Mystery", domain: "web", start: "2026-10", end: "2026-11", commits: 32, techs: ["html"], desc: "Site événementiel d'anniversaire." },
         { name: "GrateWizard", url: "https://github.com/flodef/GrateWizard", domain: "web", start: "2024-03", end: "2025-09", commits: 23, techs: ["ts", "react"], desc: "Outil assistant de prix (PriceWizard)." },
-        { name: "CV", url: "https://github.com/flodef/CV", domain: "web", start: "2023-08", end: "now", commits: 47, active: true, techs: ["html", "js"], desc: "Portfolio interactif : toile 3D de projets et expériences reliés par techno, domaine et chronologie, CV papier exportable en PDF." },
+        { name: "CV", url: "https://github.com/flodef/CV", domain: "web", start: "2023-08", end: "now", commits: 56, active: true, techs: ["html", "js"], desc: "Portfolio interactif : toile 3D de projets et expériences reliés par techno, domaine et chronologie, CV papier exportable en PDF." },
 
         // ---- Infra & perso ----
         { name: "Home Assistant Config", url: "https://github.com/flodef/ha-config", domain: "infra", start: "2026-11", end: "now", commits: 230, active: true, techs: ["python"], desc: "Configuration Home Assistant de la maison : automations, dashboards, capteurs." },
