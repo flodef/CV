@@ -47,7 +47,8 @@
       /* ---------- bouton info ---------- */
       #infoBtn,
       #themeBtn,
-      #printBtn {
+      #printBtn,
+      #searchBtn {
         position: fixed;
         right: 20px;
         bottom: 20px;
@@ -70,7 +71,8 @@
 
       #infoBtn:hover,
       #themeBtn:hover,
-      #printBtn:hover {
+      #printBtn:hover,
+      #searchBtn:hover {
         transform: scale(1.08);
         color: #007bff;
       }
@@ -81,6 +83,109 @@
 
       #printBtn {
         right: 132px;
+      }
+
+      #searchBtn {
+        right: 188px;
+      }
+
+      #searchBtn.active {
+        color: #007bff;
+        border-color: #007bff;
+      }
+
+      /* ---------- barre de recherche ---------- */
+      #searchBar {
+        position: fixed;
+        right: 240px;
+        bottom: 20px;
+        z-index: 50;
+        width: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition:
+          width 0.28s ease,
+          opacity 0.18s ease;
+      }
+
+      #searchBar.open {
+        width: min(270px, calc(100vw - 20px));
+        opacity: 1;
+      }
+
+      #searchBarInner {
+        width: min(270px, calc(100vw - 20px));
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(8px);
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 4px 5px 4px 12px;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.15);
+      }
+
+      #searchInput {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        outline: none;
+        background: transparent;
+        font: inherit;
+        font-size: 13px;
+        color: #1f2937;
+      }
+
+      #searchInput::placeholder {
+        color: #94a3b8;
+      }
+
+      #searchClear {
+        flex: none;
+        border: 0;
+        background: none;
+        color: #94a3b8;
+        font-size: 15px;
+        line-height: 1;
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #searchClear:hover {
+        color: #334155;
+        background: #f1f5f9;
+      }
+
+      body.night #searchBarInner {
+        background: rgba(15, 23, 42, 0.94);
+        border-color: #1e293b;
+      }
+
+      body.night #searchInput {
+        color: #e2e8f0;
+      }
+
+      body.night #searchInput::placeholder {
+        color: #64748b;
+      }
+
+      body.night #searchClear {
+        color: #64748b;
+      }
+
+      body.night #searchClear:hover {
+        color: #e2e8f0;
+        background: #1e293b;
+      }
+
+      body.night #searchBtn.active {
+        color: #60a5fa;
+        border-color: #60a5fa;
       }
 
       /* ---------- panneau info ---------- */
@@ -529,6 +634,20 @@
         #printBtn {
           right: 122px;
           bottom: 14px;
+        }
+
+        #searchBtn {
+          right: 176px;
+          bottom: 14px;
+        }
+
+        #searchBar {
+          right: 10px;
+          bottom: 68px;
+        }
+
+        #searchInput {
+          font-size: 16px;
         }
       }
 
@@ -1058,8 +1177,16 @@
     <canvas id="net"></canvas>
 
     <button id="printBtn" title="Version papier / PDF"><i class="ti ti-file-cv"></i></button>
+    <button id="searchBtn" title="Rechercher"><i class="ti ti-search"></i></button>
     <button id="themeBtn" title="Thème : système"><i class="ti ti-device-laptop"></i></button>
     <button id="infoBtn" title="Infos & contrôles"><i class="ti ti-info-circle"></i></button>
+
+    <div id="searchBar">
+      <div id="searchBarInner">
+        <input id="searchInput" type="text" placeholder="Rechercher un projet, une techno…" autocomplete="off" />
+        <button id="searchClear" title="Effacer"><i class="ti ti-x"></i></button>
+      </div>
+    </div>
 
     <div id="infoPanel">
       <span class="panel-close" onclick="togglePanel(false)"><i class="ti ti-x"></i></span>
@@ -1162,7 +1289,7 @@
         { name: "Valentin Ostheo", url: "https://github.com/flodef/valentin-ostheo", domain: "web", start: "2025-05", end: "2025-07", commits: 37, techs: ["html"], desc: "Site vitrine pour un ostéopathe (pages statiques)." },
         { name: "Birthday Mystery", domain: "web", start: "2026-10", end: "2026-11", commits: 32, techs: ["html"], desc: "Site événementiel d'anniversaire." },
         { name: "GrateWizard", url: "https://github.com/flodef/GrateWizard", domain: "web", start: "2024-03", end: "2025-09", commits: 23, techs: ["ts", "react"], desc: "Outil assistant de prix (PriceWizard)." },
-        { name: "CV", url: "https://github.com/flodef/CV", domain: "web", start: "2023-08", end: "2024-04", commits: 14, techs: ["html"], desc: "CV open-source — la page que vous regardez, version initiale." },
+        { name: "CV", url: "https://github.com/flodef/CV", domain: "web", start: "2023-08", end: "now", commits: 47, active: true, techs: ["html", "js"], desc: "Portfolio interactif cv.fims.fi : toile 3D de projets et expériences reliés par techno, domaine et chronologie, CV papier exportable en PDF." },
 
         // ---- Infra & perso ----
         { name: "Home Assistant Config", url: "https://github.com/flodef/ha-config", domain: "infra", start: "2026-11", end: "now", commits: 230, active: true, techs: ["python"], desc: "Configuration Home Assistant de la maison : automations, dashboards, capteurs." },
@@ -1308,6 +1435,24 @@
         sx: 0, sy: 0, depth: 0, px: 0,
       });
 
+      // ---- recherche plein texte (titre + contenu) ----
+      const normTxt = (s) =>
+        String(s)
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+      nodes.forEach((n) => {
+        n.searchText = normTxt(
+          [
+            n.name,
+            n.desc || "",
+            DOMAINS[n.domain] ? DOMAINS[n.domain].label : "",
+            ...(n.techs || []).map((t) => (TECHS[t] ? TECHS[t].label : t)),
+          ].join(" ")
+        );
+      });
+      let searchQuery = "";
+
       // ---- edges ----
       const edges = [];
       const nodeIdx = {};
@@ -1423,10 +1568,15 @@
       }
 
       const isDimmed = (n) => {
-        if (!activeFilter || n.isFlo) return false;
-        return activeFilter.kind === "domain"
-          ? n.domain !== activeFilter.key
-          : !n.techs.includes(activeFilter.key);
+        if (n.isFlo) return false;
+        if (activeFilter) {
+          const miss =
+            activeFilter.kind === "domain"
+              ? n.domain !== activeFilter.key
+              : !n.techs.includes(activeFilter.key);
+          if (miss) return true;
+        }
+        return !!searchQuery && !n.searchText.includes(searchQuery);
       };
 
       function draw() {
@@ -1454,7 +1604,7 @@
           vyaw *= 0.96;
           vpitch *= 0.96;
           pitch = Math.max(-1.45, Math.min(1.45, pitch));
-          if (autoSpin && !activeFilter && !camAnim && performance.now() - lastInteract > 4000) {
+          if (autoSpin && !activeFilter && !searchQuery && !camAnim && performance.now() - lastInteract > 4000) {
             yaw += 0.0012;
             if (targetZoom !== ZOOM0) targetZoom = ZOOM0;
           }
@@ -1494,12 +1644,12 @@
         for (const e of edges) {
           const a = nodes[e.a], b = nodes[e.b];
           const dimA = isDimmed(a), dimB = isDimmed(b);
-          if (activeFilter && dimA && dimB) continue;
+          if ((activeFilter || searchQuery) && dimA && dimB) continue;
           const depthFade = Math.min(1, Math.max(0.15, (a.depth + b.depth + 2) / 4));
 
           if (e.flo) {
-            // spokes vers Flo : visibles seulement vers le domaine filtré
-            if (activeFilter) {
+            // spokes vers Flo : visibles seulement vers les noeuds filtrés/recherchés
+            if (activeFilter || searchQuery) {
               if (dimB) continue;
               ctx.strokeStyle = `rgba(100,116,139,${0.28 * depthFade})`;
             } else {
@@ -1540,7 +1690,7 @@
           let alpha = (0.3 + 0.7 * facing) * eraAlpha;
           const dimmed = isDimmed(n);
           if (dimmed) alpha *= 0.07;
-          const emph = activeFilter && !dimmed && !n.isFlo;
+          const emph = (activeFilter || searchQuery) && !dimmed && !n.isFlo;
           const r = Math.max(1.6, n.px) * (emph ? 1.18 : 1);
 
           if (n.active || n.isFlo) {
@@ -1623,7 +1773,7 @@
         ctx.textAlign = "center";
         for (const n of nodes) {
           const isMajor = n.isFlo || n.commits >= 600 || n.active;
-          const isFiltered = activeFilter && !isDimmed(n);
+          const isFiltered = (activeFilter || searchQuery) && !isDimmed(n);
           if (!isFiltered && n !== nodes[hovered] && !n.isFlo && !(isMajor && n.depth > 0.15)) continue;
           if (isDimmed(n)) continue;
           const facing = n.isFlo ? 1 : frontness(n.depth);
@@ -1753,7 +1903,7 @@
         const same = activeFilter && activeFilter.kind === kind && activeFilter.key === key;
         activeFilter = same ? null : { kind, key };
         syncLegend();
-        if (activeFilter) {
+        if (activeFilter || searchQuery) {
           focusFilter();
         } else {
           camAnim = null;
@@ -1762,8 +1912,13 @@
         }
       }
       function clearFilter() {
-        if (!activeFilter) return;
+        const had = activeFilter || searchQuery || searchOpen;
+        if (!had) return;
         activeFilter = null;
+        searchQuery = "";
+        searchInput.value = "";
+        searchBtn.classList.remove("active");
+        setSearchOpen(false);
         syncLegend();
         camAnim = null;
         targetZoom = ZOOM0;
@@ -1772,7 +1927,7 @@
 
       /* ---- caméra : recentrer sur le filtre ---- */
       function focusFilter() {
-        if (!activeFilter) return;
+        if (!activeFilter && !searchQuery) return;
         let sx = 0, sy = 0, sz = 0, count = 0;
         const vis = [];
         for (const n of nodes) {
@@ -1853,6 +2008,49 @@
       });
       window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
       applyTheme();
+
+      /* ---- recherche ---- */
+      const searchBtn = document.getElementById("searchBtn");
+      const searchBar = document.getElementById("searchBar");
+      const searchInput = document.getElementById("searchInput");
+      const searchClear = document.getElementById("searchClear");
+      let searchOpen = false;
+      let searchTimer = null;
+
+      function setSearchOpen(open) {
+        searchOpen = open;
+        searchBar.classList.toggle("open", open);
+        if (open) searchInput.focus();
+        else searchInput.blur();
+      }
+      function applySearch() {
+        searchQuery = normTxt(searchInput.value.trim());
+        searchBtn.classList.toggle("active", !!searchQuery);
+        if (searchQuery || activeFilter) focusFilter();
+        else {
+          camAnim = null;
+          targetZoom = ZOOM0;
+          lastInteract = performance.now() - 6000;
+        }
+      }
+      searchBtn.addEventListener("click", () => setSearchOpen(!searchOpen));
+      searchInput.addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(applySearch, 250);
+      });
+      searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") setSearchOpen(false);
+        else if (e.key === "Escape") {
+          searchInput.value = "";
+          applySearch();
+          setSearchOpen(false);
+        }
+      });
+      searchClear.addEventListener("click", () => {
+        searchInput.value = "";
+        applySearch();
+        searchInput.focus();
+      });
 
       /* ---- version papier / PDF ---- */
       function buildPrintSheet() {
