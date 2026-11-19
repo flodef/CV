@@ -153,11 +153,26 @@
         font-size: 15px;
         line-height: 1;
         cursor: pointer;
-        padding: 6px;
+        width: 0;
+        padding: 0;
         border-radius: 7px;
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          width 0.18s ease,
+          padding 0.18s ease,
+          opacity 0.15s ease;
+      }
+
+      #searchBar.filled #searchClear {
+        width: 27px;
+        padding: 6px;
+        opacity: 1;
+        pointer-events: auto;
       }
 
       #searchClear:hover {
@@ -1939,6 +1954,7 @@
         activeFilter = null;
         searchQuery = "";
         searchInput.value = "";
+        searchBar.classList.remove("filled");
         searchBtn.classList.remove("active");
         setSearchOpen(false);
         syncLegend();
@@ -2052,6 +2068,7 @@
         else searchInput.blur();
       }
       function applySearch() {
+        searchBar.classList.toggle("filled", !!searchInput.value);
         searchQuery = normTxt(searchInput.value.trim());
         searchBtn.classList.toggle("active", !!searchQuery);
         if (searchQuery || activeFilter) focusFilter();
@@ -2063,6 +2080,7 @@
       }
       searchBtn.addEventListener("click", () => setSearchOpen(!searchOpen));
       searchInput.addEventListener("input", () => {
+        searchBar.classList.toggle("filled", !!searchInput.value);
         clearTimeout(searchTimer);
         searchTimer = setTimeout(applySearch, 250);
       });
