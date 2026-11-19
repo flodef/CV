@@ -354,6 +354,18 @@
       .modal-head .active-badge {
         flex: none;
         margin: 0 0 8px;
+        transform: translateX(-5px);
+        animation: badge-pulse 1.6s ease-in-out infinite;
+      }
+
+      @keyframes badge-pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.55;
+        }
       }
 
       .modal-footer a .go-chev {
@@ -582,10 +594,12 @@
       body.night .panel-btn:hover { border-color: #60a5fa; color: #60a5fa; }
       body.night #infoBtn,
       body.night #themeBtn,
-      body.night #printBtn { background: rgba(15, 23, 42, 0.85); border-color: #334155; color: #94a3b8; }
+      body.night #printBtn,
+      body.night #searchBtn { background: rgba(15, 23, 42, 0.85); border-color: #334155; color: #94a3b8; }
       body.night #infoBtn:hover,
       body.night #themeBtn:hover,
-      body.night #printBtn:hover { color: #60a5fa; }
+      body.night #printBtn:hover,
+      body.night #searchBtn:hover { color: #60a5fa; }
 
       body.night .modal { background: rgba(2, 6, 23, 0.6); }
       body.night .modal-content { background: #0f172a; border-color: #1e293b; }
@@ -1289,7 +1303,7 @@
         { name: "Valentin Ostheo", url: "https://github.com/flodef/valentin-ostheo", domain: "web", start: "2025-05", end: "2025-07", commits: 37, techs: ["html"], desc: "Site vitrine pour un ostéopathe (pages statiques)." },
         { name: "Birthday Mystery", domain: "web", start: "2026-10", end: "2026-11", commits: 32, techs: ["html"], desc: "Site événementiel d'anniversaire." },
         { name: "GrateWizard", url: "https://github.com/flodef/GrateWizard", domain: "web", start: "2024-03", end: "2025-09", commits: 23, techs: ["ts", "react"], desc: "Outil assistant de prix (PriceWizard)." },
-        { name: "CV", url: "https://github.com/flodef/CV", domain: "web", start: "2023-08", end: "now", commits: 47, active: true, techs: ["html", "js"], desc: "Portfolio interactif cv.fims.fi : toile 3D de projets et expériences reliés par techno, domaine et chronologie, CV papier exportable en PDF." },
+        { name: "CV", url: "https://github.com/flodef/CV", domain: "web", start: "2023-08", end: "now", commits: 47, active: true, techs: ["html", "js"], desc: "Portfolio interactif : toile 3D de projets et expériences reliés par techno, domaine et chronologie, CV papier exportable en PDF." },
 
         // ---- Infra & perso ----
         { name: "Home Assistant Config", url: "https://github.com/flodef/ha-config", domain: "infra", start: "2026-11", end: "now", commits: 230, active: true, techs: ["python"], desc: "Configuration Home Assistant de la maison : automations, dashboards, capteurs." },
