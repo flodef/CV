@@ -1253,7 +1253,7 @@
     <div id="infoPanel">
       <span class="panel-close" onclick="togglePanel(false)"><i class="ti ti-x"></i></span>
       <!-- VERSION : incrementer a chaque commit (v2.X = nb de commits de la v2) -->
-      <h3><span>Toile de projets <span class="panel-count" id="panelProjectCount"></span></span><span class="panel-ver">v2.48</span></h3>
+      <h3><span>Toile de projets <span class="panel-count" id="panelProjectCount"></span></span><span class="panel-ver">v2.49</span></h3>
 
       <div class="acc open">
         <button class="acc-head"><span>Domaines <i class="ti ti-info-circle acc-hint" title="Cliquer pour filtrer"></i></span><i class="ti ti-chevron-down"></i></button>
@@ -2397,9 +2397,7 @@
           <div class="meta-line"><span class="lbl">Période</span><span>${period}<span class="dur-pre"> — </span><span class="dur">${durStr(n.start, n.end)}</span></span></div>
           ${n.commits ? `<div class="meta-line"><span class="lbl">Commits</span><span>${n.commits.toLocaleString("fr-FR")}</span></div>` : ""}
           <div class="modal-comment">${n.desc}</div>
-          <div class="modal-footer">
-            ${n.url ? `<a href="${n.url}" target="_blank">${/github|gitlab|duniter/.test(n.url) ? "Voir le projet" : "Visiter le site"} <span class="go-chev">›</span></a>` : ""}
-          </div>
+          ${n.url ? `<div class="modal-footer"><a href="${n.url}" target="_blank">${/github|gitlab|duniter/.test(n.url) ? "Voir le projet" : "Visiter le site"} <span class="go-chev">›</span></a></div>` : ""}
         `;
         modal.style.display = "flex";
       }
